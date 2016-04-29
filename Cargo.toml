@@ -1,0 +1,17 @@
+[package]
+name = "euler_solutions"
+version = "0.1.0"
+authors = ["roycrippen <roycrippen@gmail.com>"]
+
+[lib]
+name = "euler_solutions"
+path = "src/lib.rs"
+
+[[bin]]
+name = "eu_all"
+
+[dependencies]
+euler_library = { git = "https://github.com/roycrippen/euler_library" }
+primal = "*"
+itertools = "*"
+num = "*"
