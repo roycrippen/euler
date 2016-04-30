@@ -7,13 +7,18 @@
 use std::str::FromStr;
 use std::cmp;
 
-extern crate euler_library;
-use self::euler_library::big as eu_big;
+extern crate itertools;
+use self::itertools::Itertools;
 
 extern crate num;
 use self::num::{BigUint, pow};
 use self::num::bigint::ToBigUint;
 
+extern crate euler_library;
+use self::euler_library::big as eu_big;
+
+
+/// Largest product in a grid
 pub fn eu011() -> String {
     fn get_data() -> Vec<Vec<usize>> {
         let buffer = include_str!("../data/p011_grid.txt");
@@ -29,7 +34,6 @@ pub fn eu011() -> String {
     let data = get_data();
     let mut max = 0;
 
-    // for (i, j) in iproduct!(0..20, 0..20) {
     for i in 0..20 {
         for j in 0..20 {
 
@@ -60,7 +64,9 @@ pub fn eu011() -> String {
 } // 70600674
 
 
+/// Highly divisible triangular number
 pub fn eu012() -> String {
+    // Returns cnt of factors of n excluding 1 and n
     fn factor_cnt(mut n: usize) -> usize {
         if n < 2 {
             return 1;
@@ -80,28 +86,28 @@ pub fn eu012() -> String {
         }
         factors
     }
+    assert_eq!(factor_cnt(21), 2);
+    assert_eq!(factor_cnt(28), 3);
 
-
-    let tri: usize;
-    let mut i = 2;
-    loop {
-        let temp = factor_cnt(i + 1);
-        if temp * factor_cnt(i / 2) > 500 {
-            tri = i * (i + 1) / 2;
-            break;
+    fn solve() -> usize {
+        for i in (2..).step(4) {
+            let temp = factor_cnt(i + 1);
+            if temp * factor_cnt(i / 2) > 500 {
+                return i * (i + 1) / 2;
+            }
+            if temp * factor_cnt((i + 2) / 2) > 500 {
+                return (i + 1) * (i + 2) / 2;
+            }
         }
-        if temp * factor_cnt((i + 2) / 2) > 500 {
-            tri = (i + 1) * (i + 2) / 2;
-            break;
-        }
-        i += 4;
+        0
     }
 
-    assert_eq!(tri, 76576500);
-    format!("eu012 = {}", tri)
+    let tri_number = solve();
+    assert_eq!(tri_number, 76576500);
+    format!("eu012 = {}", tri_number)
 } // 76576500
 
-
+/// Large sum
 pub fn eu013() -> String {
     let buffer = include_str!("../data/p013_sum.txt");
     let xs: Vec<&str> = buffer.split_whitespace().collect();
@@ -116,6 +122,7 @@ pub fn eu013() -> String {
     format!("eu013 = {}", str)
 } // 5537376230
 
+/// Longest Collatz sequence
 pub fn eu014() -> String {
     const LIMIT: usize = 1_000_000;
     let mut cache: Vec<usize> = vec![0; LIMIT];
@@ -144,6 +151,7 @@ pub fn eu014() -> String {
     format!("eu014 = {}", answer)
 } // 837799
 
+/// Lattice paths
 pub fn eu015() -> String {
     // C(n,r) = n! / ( r! (n - r)! )
     // 40! / (20! (40 - 20)!)
@@ -155,6 +163,7 @@ pub fn eu015() -> String {
     format!("eu015 = {}", s)
 } // 137846528820
 
+/// Power digit sum
 pub fn eu016() -> String {
     let n = 1000;
     let two = 2.to_biguint().unwrap();
@@ -165,6 +174,7 @@ pub fn eu016() -> String {
     format!("eu016 = {}", res)
 } // 1366
 
+/// Maximum path sum I
 pub fn eu017() -> String {
     macro_rules! hashmap {
         ($( $key: expr => $val: expr ),*) => {{
@@ -195,39 +205,21 @@ pub fn eu017() -> String {
     format!("eu017 = {}", res)
 } // 21124
 
+/// Maximum path sum I
 pub fn eu018() -> String {
-
-    const N: usize = 15;
-
-    let data = "75
-95 64
-17 47 82
-18 35 87 10
-20 04 82 47 65
-19 01 23 75 03 34
-88 02 77 73 07 63 67
-99 65 04 28 06 16 70 92
-41 41 26 56 83 40 80 70 33
-41 48 72 33 47 32 37 16 94 29
-53 71 44 65 25 43 91 52 97 51 14
-70 11 33 28 77 73 17 78 39 68 17 57
-91 71 52 38 17 14 91 43 58 50 27 29 48
-63 66 04 68 89 53 67 30 73 16 69 87 40 31
-04 62 98 27 23 09 70 98 73 93 38 53 60 04 23";
-
-    let mut xss: Vec<Vec<usize>> = Vec::new();
-    let xs: Vec<&str> = data.split('\n').collect();
-    for x in &xs {
-        // for i in 0..xs.len() {
-        let ss: Vec<&str> = x.split_whitespace().collect();
-        let mut us: Vec<usize> = Vec::new();
-        for s in ss {
-            us.push(s.parse().unwrap());
-        }
-        xss.push(us)
+    fn get_data() -> Vec<Vec<usize>> {
+        let buffer = include_str!("../data/p018_triangle.txt");
+        buffer.lines()
+              .map(|x| {
+                  x.split(' ')
+                   .map(|x| x.parse().unwrap())
+                   .collect::<Vec<usize>>()
+              })
+              .collect::<Vec<Vec<usize>>>()
     }
 
-    for i in (0..N).rev() {
+    let mut xss = get_data();
+    for i in (0..xss.len()).rev() {
         for j in 0..i {
             xss[i - 1][j] += cmp::max(xss[i][j], xss[i][j + 1])
         }
@@ -237,11 +229,11 @@ pub fn eu018() -> String {
     format!("eu018 = {}", xss[0][0])
 } // 1074
 
+/// Counting Sundays
 pub fn eu019() -> String {
     let mut sunday = 7;
     let mut cnt = 0;
     for i in 1900..2001 {
-        // let mut days = 365;
         let days = if i % 4 == 0 && (i % 100 != 0 || i % 400 == 0) { 366 } else { 365 };
         while sunday < days {
             if i != 1900 {
@@ -266,6 +258,7 @@ pub fn eu019() -> String {
     format!("eu019 = {}", cnt)
 } // 171
 
+/// Factorial digit sum
 pub fn eu020() -> String {
     let n = 100;
     let xs = eu_big::factorial(n).to_string();

@@ -1,19 +1,15 @@
-// #![feature(plugin)]
-//
-// #![plugin(clippy)]
-
 //! Project Euler solutions for problems 1 through 10.
 
 use std::ops::Add;
 use std::f64::EPSILON;
 
-extern crate euler_library;
-use self::euler_library::common as eu;
-
 extern crate primal;
 
 extern crate itertools;
 use self::itertools::Itertools;
+
+extern crate euler_library;
+use self::euler_library::common as eu;
 
 /// Multiples of 3 and 5
 pub fn eu001() -> String {
@@ -76,36 +72,42 @@ pub fn eu003() -> String {
 
 /// Largest palindrome product
 pub fn eu004() -> String {
-    let mut max = 0;
-    let it = (99..999).rev();
-    for i in it.clone() {
-        for j in it.clone() {
-            let t = i * j;
-            if eu::is_palindrome(t) && t > max {
-                max = t
-            }
-            if t < max {
-                break;
+    fn solve() -> usize {
+        let mut max = 0;
+        let it = (99..999).rev();
+        for i in it.clone() {
+            for j in it.clone() {
+                let t = i * j;
+                if t > max && eu::is_palindrome(t) {
+                    max = t
+                }
+                if t < max {
+                    break;
+                }
             }
         }
+        max
     }
 
+    let max = solve();
     assert_eq!(max, 906609);
     format!("eu004 = {}", max)
 } // 906609
 
 /// Smallest multiple
 pub fn eu005() -> String {
-    let mut i = 2520;
-    loop {
-        if i % 19 + i % 18 + i % 17 + i % 16 + i % 15 + i % 14 + i % 13 + i % 12 + i % 11 == 0 {
-            break;
+    fn solve() -> usize {
+        for i in (2520..).step(2520) {
+            if i % 19 + i % 18 + i % 17 + i % 16 + i % 15 + i % 14 + i % 13 + i % 12 + i % 11 == 0 {
+                return i;
+            }
         }
-        i += 2520
+        0
     }
 
-    assert_eq!(i, 232792560);
-    format!("eu005 = {}", i)
+    let res = solve();
+    assert_eq!(res, 232792560);
+    format!("eu005 = {}", res)
 } // 232792560
 
 /// Sum square difference
@@ -138,7 +140,12 @@ pub fn eu008() -> String {
                    .collect::<Vec<_>>();
 
     let max = (0..(vals.len() - 12))
-                  .map(|i| vals.iter().take(i + 13).skip(i).fold(1, |acc, x| acc * x))
+                  .map(|i| {
+                      vals.iter()
+                          .take(i + 13)
+                          .skip(i)
+                          .fold(1, |acc, x| acc * x)
+                  })
                   .max()
                   .unwrap();
 
@@ -156,7 +163,8 @@ pub fn eu009() -> String {
                           if c.fract() < EPSILON && circum == 1000 { Some(a * b * (c as usize)) } else { None }
                       })
                   })
-                  .collect::<Vec<_>>()[0];
+                  .nth(0)
+                  .unwrap();
 
     assert_eq!(res, 31875000);
     format!("eu009 = {}", res)
@@ -166,10 +174,10 @@ pub fn eu009() -> String {
 pub fn eu010() -> String {
     fn solve(n: usize) -> usize {
         match n {
-            0...1 => return 0,
-            2 => return 2,
-            3...4 => return 5,
-            5...7 => return 10,
+            0...1 => 0,
+            2 => 2,
+            3...4 => 5,
+            5...7 => 10,
             _ => {
                 let sieve = primal::Sieve::new(2_000_000);
                 (7..n)

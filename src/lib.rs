@@ -1,3 +1,6 @@
+//#![feature(plugin)]
+//#![plugin(clippy)]
+
 //! Solutions to selected Project Euler problems. (https://projecteuler.net)
 //!
 //! # Using this crate
@@ -28,6 +31,7 @@ use std::sync::mpsc;
 
 pub mod eu001_010;
 pub mod eu011_020;
+pub mod eu021_030;
 
 // Returns a `HashMap` of ("problem number", function to execute) from list of functions fns
 fn get_fn_map(fns: &[fn() -> String], start: u32) -> HashMap<String, fn() -> String> {
@@ -39,7 +43,7 @@ fn get_fn_map(fns: &[fn() -> String], start: u32) -> HashMap<String, fn() -> Str
 
 /// Facilitates execution of one or more solutions stored in function vector fns.
 ///
-/// ```example
+/// ```ignore
 /// extern crate euler_solutions;
 /// use euler_solutions as sol;
 /// use euler_solutions::eu001_010;

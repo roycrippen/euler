@@ -12,13 +12,13 @@ extern crate euler_solutions;
 use euler_solutions as sol;
 use euler_solutions::eu001_010;
 use euler_solutions::eu011_020;
+use euler_solutions::eu021_030;
 
 /// Run 1 solution given in arg or all solutions concurrently.
 pub fn main() {
     let mut fns = eu001_010::get_functions();
     fns.append(&mut eu011_020::get_functions());
-    // fns.append(&mut eu021_030::get_functions());
-    //
+    fns.append(&mut eu021_030::get_functions());
     // // fns.append(&mut eu031_040::get_functions());
     // // fns.append(&mut eu041_050::get_functions());
     // // fns.append(&mut eu051_060::get_functions());

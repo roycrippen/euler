@@ -11,7 +11,10 @@ path = "src/lib.rs"
 name = "eu_all"
 
 [dependencies]
-euler_library = { git = "https://github.com/roycrippen/euler_library" }
+# clippy = "*"
 primal = "*"
 itertools = "*"
 num = "*"
+
+[dependencies.euler_library]
+git = "https://github.com/roycrippen/euler_library"
