@@ -11,7 +11,7 @@ path = "src/lib.rs"
 name = "eu_all"
 
 [dependencies]
-clippy = "*"
+# clippy = "*"
 primal = "*"
 itertools = "*"
 num = "*"

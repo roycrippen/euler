@@ -1,5 +1,5 @@
-#![feature(plugin)]
-#![plugin(clippy)]
+//#![feature(plugin)]
+//#![plugin(clippy)]
 
 //! Solutions to selected Project Euler problems. (https://projecteuler.net)
 //!
