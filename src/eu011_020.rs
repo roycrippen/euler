@@ -1,7 +1,3 @@
-// #![feature(plugin)]
-//
-// #![plugin(clippy)]
-
 //! Project Euler solutions for problems 11 through 20.
 
 use std::str::FromStr;
@@ -34,8 +30,8 @@ pub fn eu011() -> String {
     let data = get_data();
     let mut max = 0;
 
-    for i in 0..20 {
-        for j in 0..20 {
+    for (i, vi) in data.iter().enumerate().take(20) {
+        for (j, _) in vi.iter().enumerate().take(20) {
 
             let mut t = data[i][j] * data[i][j + 1] * data[i][j + 2] * data[i][j + 3];
             if t > max {

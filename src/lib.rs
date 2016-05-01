@@ -1,11 +1,11 @@
-//#![feature(plugin)]
-//#![plugin(clippy)]
+#![feature(plugin)]
+#![plugin(clippy)]
 
 //! Solutions to selected Project Euler problems. (https://projecteuler.net)
 //!
 //! # Using this crate
 //!
-//! Clone this repository, move to euler_soutions directory and build.
+//! Clone this repository, move to `euler_soutions` directory and build.
 //!
 //! `...some_path/euler_soutions/cargo build --release`
 //!
@@ -32,6 +32,9 @@ use std::sync::mpsc;
 pub mod eu001_010;
 pub mod eu011_020;
 pub mod eu021_030;
+pub mod eu031_040;
+pub mod eu041_050;
+
 
 // Returns a `HashMap` of ("problem number", function to execute) from list of functions fns
 fn get_fn_map(fns: &[fn() -> String], start: u32) -> HashMap<String, fn() -> String> {
@@ -57,14 +60,11 @@ fn get_fn_map(fns: &[fn() -> String], start: u32) -> HashMap<String, fn() -> Str
 pub fn run(fns: Vec<fn() -> String>, arg_maybe: Option<String>, start: u32) {
     let mut fns = fns;
     let fn_map = get_fn_map(&fns, start);
-    match arg_maybe {
-        Some(arg) => {
+        if let Some(arg) = arg_maybe {
             if fn_map.contains_key(&arg) {
                 fns = vec![*fn_map.get(&arg).unwrap()];
             }
         }
-        _ => (),
-    }
     // reversed is faster, gives harder higher number problems more time
     fns.reverse();
     execute(fns)

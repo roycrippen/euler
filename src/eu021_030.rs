@@ -1,8 +1,4 @@
-// #![feature(plugin)]
-//
-// #![plugin(clippy)]
-
-//! Project Euler solutions for problems 11 through 20.
+//! Project Euler solutions for problems 21 through 30.
 
 use std::str::FromStr;
 use std::mem;

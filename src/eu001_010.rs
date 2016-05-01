@@ -97,12 +97,13 @@ pub fn eu004() -> String {
 /// Smallest multiple
 pub fn eu005() -> String {
     fn solve() -> usize {
-        for i in (2520..).step(2520) {
-            if i % 19 + i % 18 + i % 17 + i % 16 + i % 15 + i % 14 + i % 13 + i % 12 + i % 11 == 0 {
+        let mut i = 2520;
+        loop {
+            if i % 11 + i % 12 + i % 13 + i % 14 + i % 15 + i % 16 + i % 17 + i % 18 + i % 19 == 0 {
                 return i;
             }
+            i += 2520;
         }
-        0
     }
 
     let res = solve();
