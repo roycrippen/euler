@@ -166,32 +166,32 @@ pub fn eu077() -> String {
 
 /// Coin partitions
 pub fn eu078() -> String {
-    // custom version of euler_lib::p(n)
-    fn p() -> usize {
+    // custom version of euler_library::integer_partitions()
+    fn partitions() -> usize {
         // list of pentagonal numbers
         let k = (1..250)
                     .flat_map(|i| vec![i * (3 * i - 1) / 2, i * (3 * i - 1) / 2 + i])
                     .collect::<Vec<_>>();
 
-        let mut p: Vec<i64> = vec![1];
+        let mut ps: Vec<i64> = vec![1];
         let sign: Vec<i64> = vec![1, 1, -1, -1];
         let mut n = 0;
-        while p[n] != 0 {
+        while ps[n] != 0 {
             n += 1;
             let mut t: i64 = 0;
             let mut i = 0;
             while k[i] <= n {
-                t += (p[n - k[i]] as i64) * sign[i % 4];
+                t += (ps[n - k[i]] as i64) * sign[i % 4];
                 i += 1;
             }
-            p.push(t % 1_000_000)
+            ps.push(t % 1_000_000)
         }
         n
     }
 
-    let res = p();
+    let res = partitions();
     assert_eq!(res, 55374);
-    format!("eu078 = {}", p())
+    format!("eu078 = {}", res)
 } // 55374
 
 /// Passcode derivation
@@ -201,7 +201,7 @@ pub fn eu079() -> String {
                       790, 680, 890, 362, 319, 760, 316, 729, 380, 319, 728, 716];
 
     xs.sort();
-    let xss = xs.into_iter().map(|x| eu::to_bytes(x)).collect::<Vec<_>>();
+    let xss = xs.into_iter().map(eu::to_bytes).collect::<Vec<_>>();
 
     fn get_next(mut val: u8, xss: Vec<Vec<u8>>, set: Vec<u8>) -> u8 {
         for j in 1..3 {

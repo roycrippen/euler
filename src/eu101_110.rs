@@ -89,26 +89,26 @@ pub fn eu101() -> String {
 
         // back substitution
         let mut x = vec!(0.0 as f64;n);
-        let mut i = n - 1;
+        let mut idx = n - 1;
         loop {
             let mut sum = 0.0;
-            for j in i + 1..n {
-                sum += a[i][j] * x[j];
+            for j in idx + 1..n {
+                sum += a[idx][j] * x[j];
             }
-            x[i] = ((b[i] - sum) / a[i][i]).round();
-            if i == 0 {
+            x[idx] = ((b[idx] - sum) / a[idx][idx]).round();
+            if idx == 0 {
                 break;
             }
-            i -= 1;
+            idx -= 1;
         }
         x
     }
 
     static EPSILON: f64 = 1.0e-10;
 
-    let full_rhs = (1..11).map(|x| un(x)).collect_vec();
+    let full_rhs = (1..11).map(un).collect_vec();
 
-    let mut res = 0.0;
+    let mut result = 0.0;
     for i in 1..11 {
         let lhs = get_lhs(i);
         let rhs = full_rhs.iter().take(i).map(|&x| x).collect_vec();
@@ -116,11 +116,11 @@ pub fn eu101() -> String {
         if i == 2 {
             assert_eq!(un(2), check(&x))
         }
-        res += get_bop(&mut x);
+        result += get_bop(&mut x);
     }
 
-    assert_eq!(res as usize, 37076114526);
-    format!("eu101 = {}", res)
+    assert_eq!(result as usize, 37076114526);
+    format!("eu101 = {}", result)
 } // 37076114526
 
 /// Triangle containment
@@ -141,10 +141,9 @@ pub fn eu102() -> String {
                             .collect::<Vec<i32>>()
                        })
                        .collect_vec();
-        let ps = xs.into_iter()
-                   .map(|z| vec![P { x: z[0], y: z[1] }, P { x: z[2], y: z[3] }, P { x: z[4], y: z[5] }])
-                   .collect_vec();
-        ps
+        xs.into_iter()
+          .map(|z| vec![P { x: z[0], y: z[1] }, P { x: z[2], y: z[3] }, P { x: z[4], y: z[5] }])
+          .collect_vec()
     }
 
 
@@ -195,15 +194,15 @@ pub fn eu102() -> String {
 /// Special subset sums: optimum
 pub fn eu103() -> String {
 
-    fn set_string(set: &Vec<usize>) -> String {
+    fn set_string(set: &[usize]) -> String {
         set.iter().fold("".to_string(), |acc, x| acc + &x.to_string())
     }
 
-    fn vec_sum(set: &Vec<usize>) -> usize {
+    fn vec_sum(set: &[usize]) -> usize {
         set.into_iter().fold(0, |acc, x| acc + x)
     }
 
-    fn has_duplicates<T: Ord>(xs: &Vec<T>) -> bool {
+    fn has_duplicates<T: Ord>(xs: &[T]) -> bool {
         let l = xs.into_iter().dedup().collect_vec().len();
         l != xs.len()
     }
@@ -325,21 +324,20 @@ pub fn eu104() -> String {
 pub fn eu105() -> String {
     fn get_data() -> Vec<Vec<usize>> {
         let buffer = include_str!("../data/p105_sets.txt");
-        let xs = buffer.lines()
-                       .map(|x| {
-                           x.split(',')
-                            .map(|x| x.parse().unwrap())
-                            .sorted()
-                       })
-                       .collect_vec();
-        xs
+        buffer.lines()
+              .map(|x| {
+                  x.split(',')
+                   .map(|x| x.parse().unwrap())
+                   .sorted()
+              })
+              .collect_vec()
     }
 
-    fn vec_sum(set: &Vec<usize>) -> usize {
+    fn vec_sum(set: &[usize]) -> usize {
         set.into_iter().fold(0, |acc, x| acc + x)
     }
 
-    fn has_duplicates<T: Ord>(xs: &Vec<T>) -> bool {
+    fn has_duplicates<T: Ord>(xs: &[T]) -> bool {
         let l = xs.into_iter().dedup().collect_vec().len();
         l != xs.len()
     }

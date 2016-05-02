@@ -4,6 +4,7 @@ use std::collections::HashSet;
 use std::collections::HashMap;
 use std::fmt;
 use std::cmp;
+use std::f64::EPSILON;
 
 extern crate num;
 use self::num::integer::gcd;
@@ -80,52 +81,52 @@ pub fn eu093() -> String {
     }
 
     // x = (a op1 b) op2 (c op3 d)
-    fn eval_group1(ns: &Vec<i32>, os: &Vec<char>, set: &mut HashSet<i32>) {
+    fn eval_group1(ns: &[i32], os: &[char], set: &mut HashSet<i32>) {
         let (a, b, c, d) = (ns[0] as f64, ns[1] as f64, ns[2] as f64, ns[3] as f64);
         let (op1, op2, op3) = (os[0], os[1], os[2]);
-        let x = eval(eval(a, b, op1), eval(c, d, op3), op2);
-        if x > 0.0 && x == x.floor() {
-            set.insert(x as i32);
+        let val = eval(eval(a, b, op1), eval(c, d, op3), op2);
+        if val > 0.0 && (val - val.floor()).abs() < EPSILON {
+            set.insert(val as i32);
         }
     }
 
     // x = ((a op1 b) op2 c) op 3 d
-    fn eval_group2(ns: &Vec<i32>, os: &Vec<char>, set: &mut HashSet<i32>) {
+    fn eval_group2(ns: &[i32], os: &[char], set: &mut HashSet<i32>) {
         let (a, b, c, d) = (ns[0] as f64, ns[1] as f64, ns[2] as f64, ns[3] as f64);
         let (op1, op2, op3) = (os[0], os[1], os[2]);
-        let x = eval(eval(eval(a, b, op1), c, op2), d, op3);
-        if x > 0.0 && x == x.floor() {
-            set.insert(x as i32);
+        let val = eval(eval(eval(a, b, op1), c, op2), d, op3);
+        if val > 0.0 && (val - val.floor()).abs() < EPSILON {
+            set.insert(val as i32);
         }
     }
 
     // x = (a op1 (b op2 c)) op3 d
-    fn eval_group3(ns: &Vec<i32>, os: &Vec<char>, set: &mut HashSet<i32>) {
+    fn eval_group3(ns: &[i32], os: &[char], set: &mut HashSet<i32>) {
         let (a, b, c, d) = (ns[0] as f64, ns[1] as f64, ns[2] as f64, ns[3] as f64);
         let (op1, op2, op3) = (os[0], os[1], os[2]);
-        let x = eval(eval(a, eval(b, c, op2), op1), d, op3);
-        if x > 0.0 && x == x.floor() {
-            set.insert(x as i32);
+        let val = eval(eval(a, eval(b, c, op2), op1), d, op3);
+        if val > 0.0 && (val - val.floor()).abs() < EPSILON {
+            set.insert(val as i32);
         }
     }
 
     // x = a op1 (b op2 (c op3 d))
-    fn eval_group4(ns: &Vec<i32>, os: &Vec<char>, set: &mut HashSet<i32>) {
+    fn eval_group4(ns: &[i32], os: &[char], set: &mut HashSet<i32>) {
         let (a, b, c, d) = (ns[0] as f64, ns[1] as f64, ns[2] as f64, ns[3] as f64);
         let (op1, op2, op3) = (os[0], os[1], os[2]);
-        let x = eval(eval(b, eval(c, d, op3), op2), a, op1);
-        if x > 0.0 && x == x.floor() {
-            set.insert(x as i32);
+        let val = eval(eval(b, eval(c, d, op3), op2), a, op1);
+        if val > 0.0 && (val - val.floor()).abs() < EPSILON {
+            set.insert(val as i32);
         }
     }
 
     // x = a op1 ((b op2 c) op3 d))
-    fn eval_group5(ns: &Vec<i32>, os: &Vec<char>, set: &mut HashSet<i32>) {
+    fn eval_group5(ns: &[i32], os: &[char], set: &mut HashSet<i32>) {
         let (a, b, c, d) = (ns[0] as f64, ns[1] as f64, ns[2] as f64, ns[3] as f64);
         let (op1, op2, op3) = (os[0], os[1], os[2]);
-        let x = eval(eval(d, eval(b, c, op2), op3), a, op1);
-        if x > 0.0 && x == x.floor() {
-            set.insert(x as i32);
+        let val = eval(eval(d, eval(b, c, op2), op3), a, op1);
+        if val > 0.0 && (val - val.floor()).abs() < EPSILON {
+            set.insert(val as i32);
         }
     }
 
@@ -139,7 +140,7 @@ pub fn eu093() -> String {
     }
 
     let mut max = (0, vec![]);
-    let perm_ops = &eu::perms_with_reps(3, &vec!['+', '-', '*', '/']);
+    let perm_ops = &eu::perms_with_reps(3, &['+', '-', '*', '/']);
     let nums_comb = vec![1, 2, 3, 4, 5, 6, 7, 8, 9].into_iter().combinations_n(4);
 
     for nums in nums_comb {
@@ -275,12 +276,12 @@ pub fn eu096() -> String {
     impl fmt::Display for Cell {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             let mut str = "".to_string();
-            for v in self.possible.iter() {
-                if *v != '0' { str = str + &format!("{}", v) } else { str = str + &format!(" ") }
+            for v in &self.possible {
+                if *v != '0' { str = str + &format!("{}", v) } else { str = str + " " }
             }
-            let mut _v = ' ';
-            if self.v != '0' { _v = self.v } else { _v = '_' }
-            write!(f, "[{}, {}]", _v, str)
+            let v1;
+            if self.v != '0' { v1 = self.v } else { v1 = '_' }
+            write!(f, "[{}, {}]", v1, str)
         }
     }
 
@@ -292,7 +293,7 @@ pub fn eu096() -> String {
     impl fmt::Display for Row {
         fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
             let mut str = "".to_string();
-            for v in self.c.iter() {
+            for v in &self.c {
                 str = str + &format!("{} ", v)
             }
             write!(f, "[ {}]", str)
@@ -424,7 +425,7 @@ pub fn eu096() -> String {
 
         fn is_valid_grid(&self) -> bool {
 
-            fn len_ok(cs: &Vec<char>) -> bool {
+            fn len_ok(cs: &[char]) -> bool {
                 let mut ts = cs.iter().filter(|&x| *x != '0').collect::<Vec<&char>>();
                 let l = ts.len();
                 ts.sort();
@@ -448,9 +449,9 @@ pub fn eu096() -> String {
                     cs_cols.push(self.r[j].c[i].v);
                     cs_boxes.push(self.r[(i / 3) * 3 + j / 3].c[i * 3 % 9 + j % 3].v);
                 }
-                if !len_ok(&mut cs_rows) { return false } else { cs_rows.clear() }
-                if !len_ok(&mut cs_cols) { return false } else { cs_cols.clear() }
-                if !len_ok(&mut cs_boxes) { return false } else { cs_boxes.clear() }
+                if !len_ok(&cs_rows) { return false } else { cs_rows.clear() }
+                if !len_ok(&cs_cols) { return false } else { cs_cols.clear() }
+                if !len_ok(&cs_boxes) { return false } else { cs_boxes.clear() }
             }
             true
         }
@@ -516,7 +517,7 @@ pub fn eu096() -> String {
     }
 
     let mut cnt = 0;
-    for v in xss.iter() {
+    for v in &xss {
         // for (idx, v) in xss.iter().enumerate() {
         // println!("solving Sudoku puzzle {}...", idx + 1);
         let grid = Grid::new_game(v.clone());
@@ -542,33 +543,30 @@ pub fn eu097() -> String {
 pub fn eu098() -> String {
     // get the words from the file
     fn get_words() -> Vec<String> {
-        let words = include_str!("../data/p098_words.txt")
-                        .chars()
-                        .filter(|&x| x != '\"')
-                        .collect::<String>()
-                        .split(',')
-                        .map(|x| x.to_string())
-                        .collect_vec();
-        words
+        include_str!("../data/p098_words.txt")
+            .chars()
+            .filter(|&x| x != '\"')
+            .collect::<String>()
+            .split(',')
+            .map(|x| x.to_string())
+            .collect_vec()
     }
 
     // sort each word within words, save words original index
     fn get_sorted_words(words: Vec<String>) -> Vec<(Vec<char>, usize)> {
-        let sorted_words = words.into_iter()
-                                .enumerate()
-                                .map(|(i, x)| (x.chars().sorted(), i))
-                                .sorted();
-        sorted_words
+        words.into_iter()
+             .enumerate()
+             .map(|(i, x)| (x.chars().sorted(), i))
+             .sorted()
     }
 
     // find anagram pairs
     fn get_anagrams(words: Vec<String>) -> Vec<(usize, usize)> {
         let sws = get_sorted_words(words);
-        let anagrams = (0..sws.len() - 1)
-                           .filter(|&i| sws[i].0 == sws[i + 1].0)
-                           .map(|i| (sws[i].1, sws[i + 1].1))
-                           .collect();
-        anagrams
+        (0..sws.len() - 1)
+            .filter(|&i| sws[i].0 == sws[i + 1].0)
+            .map(|i| (sws[i].1, sws[i + 1].1))
+            .collect()
     }
 
     // vector of i*i exactly n digits long
@@ -583,7 +581,7 @@ pub fn eu098() -> String {
     }
 
     // get_pattern([a,b,c,b,d]) == [None,Some(3),None,Some(1),None]
-    fn get_pattern(cs: &Vec<char>) -> Vec<Option<usize>> {
+    fn get_pattern(cs: &[char]) -> Vec<Option<usize>> {
         let mut res = vec![None; cs.len()];
         for i in 0..cs.len() - 1 {
             for j in i + 1..cs.len() {
@@ -597,7 +595,7 @@ pub fn eu098() -> String {
     }
 
     // find cnadidate squared number
-    fn find_candidate(w1: &String, w2: &String, num: usize) -> Option<usize> {
+    fn find_candidate(w1: &str, w2: &str, num: usize) -> Option<usize> {
         let mut hash = HashMap::new();
         let ws1 = w1.chars().collect_vec();
         let nums = &num.to_string().chars().collect_vec();
@@ -632,9 +630,9 @@ pub fn eu098() -> String {
                                    .collect_vec();
         let squares = get_squares(i);
 
-        for j in 0..anagrams.len() {
+        for v in &anagrams {
             for n in squares.clone() {
-                let candidate = find_candidate(&words[anagrams[j].0], &words[anagrams[j].1], n);
+                let candidate = find_candidate(&words[v.0], &words[v.1], n);
                 if candidate == None {
                     continue;
                 }

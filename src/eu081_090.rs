@@ -1,6 +1,7 @@
 //! Project Euler solutions for problems 81 through 90.
 
 use std::cmp;
+use std::f64::EPSILON;
 
 extern crate itertools;
 use self::itertools::Itertools;
@@ -20,19 +21,18 @@ use self::petgraph::algo::dijkstra;
 /// Returns data from matrix.txt. Used by eu081, eu082 and eu083
 pub fn get_data() -> Vec<usize> {
     let buffer = include_str!("../data/matrix.txt");
-    let xs = buffer.lines()
-                   .flat_map(|x| {
-                       x.split(',')
-                        .map(|x| x.parse().unwrap())
-                        .collect::<Vec<usize>>()
-                   })
-                   .collect();
-    xs
+    buffer.lines()
+          .flat_map(|x| {
+              x.split(',')
+               .map(|x| x.parse().unwrap())
+               .collect::<Vec<usize>>()
+          })
+          .collect()
 }
 
 /// Path sum: two ways
 pub fn eu081() -> String {
-    fn get_edges(i: u32, ws: &Vec<usize>, cols: u32) -> Vec<(u32, u32, usize)> {
+    fn get_edges(i: u32, ws: &[usize], cols: u32) -> Vec<(u32, u32, usize)> {
         // first node
         if i == 0 {
             return vec![((i, i + 1, ws[i as usize]))];
@@ -49,7 +49,7 @@ pub fn eu081() -> String {
         edges
     }
 
-    fn make_graph(weights: &Vec<usize>) -> Graph<usize, usize> {
+    fn make_graph(weights: Vec<usize>) -> Graph<usize, usize> {
         let mut g = Graph::<usize, usize>::new();
         for i in 0..weights.len() + 1 {
             g.add_node(i);
@@ -63,10 +63,10 @@ pub fn eu081() -> String {
         g
     }
 
-    fn solve(g: &Graph<usize, usize>, idxs: &Vec<graph::NodeIndex>) -> usize {
+    fn solve(g: Graph<usize, usize>, idxs: Vec<graph::NodeIndex>) -> usize {
         let start_node = idxs[0];
         let finish_node = idxs.last().unwrap();
-        let sol = dijkstra(g, // directed graph
+        let sol = dijkstra(&g, // directed graph
                            start_node, // start node
                            Some(*finish_node), // finishing node
                            |gr, n| gr.edges(n).map(|(n, &e)| (n, e)));  // edges for each node iterator
@@ -81,14 +81,14 @@ pub fn eu081() -> String {
                    vec![537, 699, 497, 121, 956],
                    vec![805, 732, 524, 37, 331]];
     let xs = xss.into_iter().flat_map(|x| x).collect();
-    let g = make_graph(&xs);
+    let g = make_graph(xs);
     let idxs = g.node_indices().collect::<Vec<_>>();
-    let res = solve(&g, &idxs);
+    let res = solve(g, idxs);
     assert_eq!(res, 2427);
 
-    let g = make_graph(&get_data());
+    let g = make_graph(get_data());
     let idxs = g.node_indices().collect::<Vec<_>>();
-    let res = solve(&g, &idxs);
+    let res = solve(g, idxs);
 
     assert_eq!(res, 427337);
     format!("eu081 = {}", res)
@@ -96,7 +96,7 @@ pub fn eu081() -> String {
 
 /// Path sum: three ways
 pub fn eu082() -> String {
-    fn get_edges(i: u32, ws: &Vec<usize>, cols: u32) -> Vec<(u32, u32, usize)> {
+    fn get_edges(i: u32, ws: &[usize], cols: u32) -> Vec<(u32, u32, usize)> {
         // first nodes (whole first column)
         if i == 0 {
             return (0..ws.len())
@@ -124,7 +124,7 @@ pub fn eu082() -> String {
         edges
     }
 
-    fn make_graph(weights: &Vec<usize>) -> Graph<usize, usize> {
+    fn make_graph(weights: Vec<usize>) -> Graph<usize, usize> {
         let mut g = Graph::<usize, usize>::new();
         for i in 0..weights.len() + 1 {
             g.add_node(i);
@@ -138,17 +138,17 @@ pub fn eu082() -> String {
         g
     }
 
-    fn solve(g: &Graph<usize, usize>, idxs: &Vec<graph::NodeIndex>) -> (usize, usize) {
+    fn solve(g: Graph<usize, usize>, idxs: Vec<graph::NodeIndex>) -> (usize, usize) {
         let start_node = idxs[0];
-        let sol = dijkstra(g, // directed graph
-                           start_node, // start node
-                           None, // finishing node
-                           |gr, n| gr.edges(n).map(|(n, &e)| (n, e)));
+        let solution = dijkstra(&g, // directed graph
+                                start_node, // start node
+                                None, // finishing node
+                                |gr, n| gr.edges(n).map(|(n, &e)| (n, e)));
 
-        let col = ((sol.len() - 1) as f64).sqrt() as usize;
-        let sol_vec = sol.into_iter()
-                         .filter_map(|(n, s)| if g[n] % col == 0 && s != 0 { Some((s, g[n])) } else { None })
-                         .sorted();
+        let col = ((solution.len() - 1) as f64).sqrt() as usize;
+        let sol_vec = solution.into_iter()
+                              .filter_map(|(n, s)| if g[n] % col == 0 && s != 0 { Some((s, g[n])) } else { None })
+                              .sorted();
         sol_vec.into_iter().min().unwrap()
     }
 
@@ -159,21 +159,21 @@ pub fn eu082() -> String {
                    vec![537, 699, 497, 121, 956],
                    vec![805, 732, 524, 37, 331]];
     let xs = xss.into_iter().flat_map(|x| x).collect();
-    let g = make_graph(&xs);
+    let g = make_graph(xs);
     let idxs = g.node_indices().collect::<Vec<_>>();
-    let (res, _) = solve(&g, &idxs);
+    let (res, _) = solve(g, idxs);
     assert_eq!(res, 994);
 
-    let g = make_graph(&get_data());
+    let g = make_graph(get_data());
     let idxs = g.node_indices().collect::<Vec<_>>();
-    let (res, _) = solve(&g, &idxs);
+    let (res, _) = solve(g, idxs);
     assert_eq!(res, 260324);
     format!("eu082 = {}", res)
 } // 260324
 
 /// Path sum: four ways
 pub fn eu083() -> String {
-    fn get_edges(i: u32, ws: &Vec<usize>, cols: u32) -> Vec<(u32, u32, usize)> {
+    fn get_edges(i: u32, ws: &[usize], cols: u32) -> Vec<(u32, u32, usize)> {
         // first node
         if i == 0 {
             return vec![((i, i + 1, ws[i as usize]))];
@@ -198,7 +198,7 @@ pub fn eu083() -> String {
         edges
     }
 
-    fn make_graph(weights: &Vec<usize>) -> Graph<usize, usize> {
+    fn make_graph(weights: Vec<usize>) -> Graph<usize, usize> {
         let mut g = Graph::<usize, usize>::new();
         for i in 0..weights.len() + 1 {
             g.add_node(i);
@@ -212,10 +212,10 @@ pub fn eu083() -> String {
         g
     }
 
-    fn solve(g: &Graph<usize, usize>, idxs: &Vec<graph::NodeIndex>) -> usize {
+    fn solve(g: Graph<usize, usize>, idxs: Vec<graph::NodeIndex>) -> usize {
         let start_node = idxs[0];
         let finish_node = idxs.last().unwrap();
-        let sol = dijkstra(g, // directed graph
+        let sol = dijkstra(&g, // directed graph
                            start_node, // start node
                            Some(*finish_node), // finishing node
                            |gr, n| gr.edges(n).map(|(n, &e)| (n, e)));  // edges for each node iterator
@@ -230,14 +230,14 @@ pub fn eu083() -> String {
                    vec![537, 699, 497, 121, 956],
                    vec![805, 732, 524, 37, 331]];
     let xs = xss.into_iter().flat_map(|x| x).collect();
-    let g = make_graph(&xs);
+    let g = make_graph(xs);
     let idxs = g.node_indices().collect::<Vec<_>>();
-    let res = solve(&g, &idxs);
+    let res = solve(g, idxs);
     assert_eq!(res, 2297);
 
-    let g = make_graph(&get_data());
+    let g = make_graph(get_data());
     let idxs = g.node_indices().collect::<Vec<_>>();
-    let res = solve(&g, &idxs);
+    let res = solve(g, idxs);
     assert_eq!(res, 425185);
     format!("eu083 = {}", res)
 } // 425185
@@ -317,7 +317,7 @@ pub fn eu084() -> String {
         (d1, d2)
     }
 
-    fn find_ranks(game: &Vec<Sim>) -> Vec<(usize, usize)> {
+    fn find_ranks(game: &[Sim]) -> Vec<(usize, usize)> {
         let temp = game.iter().map(|x| x.visits as f64).zip(0..).collect::<Vec<_>>();
         let sum = temp.iter().fold(0.0, |acc, x| acc + x.0);
         // println!("sum = {:?}", sum);
@@ -449,7 +449,7 @@ pub fn eu086() -> String {
         for i in 3..2 * j as usize {
             let (ab, c) = (i as f64, j as f64);
             let sqrt = ((ab).powf(2.0) + c * c).sqrt();
-            if sqrt == sqrt.floor() {
+            if (sqrt - sqrt.floor()).abs() < EPSILON {
                 if ab < j { cnt += ab / 2.0 } else { cnt += j + 1.0 - (ab + 1.0) / 2.0 }
             }
         }
@@ -491,7 +491,7 @@ pub fn eu087() -> String {
 /// Product-sum numbers
 pub fn eu088() -> String {
     fn merge(a: usize, b: usize, mut cache: &mut Vec<Vec<Vec<usize>>>, mut res: &mut Vec<Vec<usize>>) {
-        if cache[a].len() != 0 && cache[a][0][0] == 0 {
+        if !cache[a].is_empty() && cache[a][0][0] == 0 {
             cache[a] = factor_lists(a, &mut cache);
         }
         for v in cache[a].clone() {
@@ -520,7 +520,7 @@ pub fn eu088() -> String {
         res
     }
 
-    fn sum(xs: &Vec<usize>) -> usize {
+    fn sum(xs: &[usize]) -> usize {
         xs.iter().fold(0, |acc, &x| acc + x)
     }
 

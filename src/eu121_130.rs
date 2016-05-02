@@ -81,7 +81,7 @@ pub fn eu122() -> String {
 
                 let mut res = path(*p.get(&n).unwrap(), p, lvl);
                 res.push(n);
-                return res;
+                res
             }
         }
     }

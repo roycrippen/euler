@@ -21,4 +21,5 @@ petgraph = "*"
 rand = "*"
 
 [dependencies.euler_library]
-git = "https://github.com/roycrippen/euler_library"
+# git = "https://github.com/roycrippen/euler_library"
+path = "/home/roy/rustProjects/crippen/euler/euler_library"
