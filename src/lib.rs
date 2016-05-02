@@ -1,5 +1,5 @@
-//#![feature(plugin)]
-//#![plugin(clippy)]
+// #![feature(plugin)]
+// #![plugin(clippy)]
 
 //! Solutions to selected Project Euler problems. (https://projecteuler.net)
 //!
@@ -34,6 +34,10 @@ pub mod eu011_020;
 pub mod eu021_030;
 pub mod eu031_040;
 pub mod eu041_050;
+pub mod eu051_060;
+pub mod eu061_070;
+pub mod eu071_080;
+pub mod eu081_090;
 
 
 // Returns a `HashMap` of ("problem number", function to execute) from list of functions fns

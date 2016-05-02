@@ -16,6 +16,9 @@ primal = "*"
 itertools = "*"
 num = "*"
 permutohedron = "*"
+numerals = "*"
+petgraph = "*"
+rand = "*"
 
 [dependencies.euler_library]
 git = "https://github.com/roycrippen/euler_library"
