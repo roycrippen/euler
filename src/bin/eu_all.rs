@@ -16,6 +16,10 @@ use euler_solutions::eu051_060;
 use euler_solutions::eu061_070;
 use euler_solutions::eu071_080;
 use euler_solutions::eu081_090;
+use euler_solutions::eu091_100;
+use euler_solutions::eu101_110;
+use euler_solutions::eu111_120;
+use euler_solutions::eu121_130;
 
 /// Run 1 solution given in arg or all solutions concurrently.
 pub fn main() {
@@ -28,11 +32,10 @@ pub fn main() {
     fns.append(&mut eu061_070::get_functions());
     fns.append(&mut eu071_080::get_functions());
     fns.append(&mut eu081_090::get_functions());
-    // // fns.append(&mut eu091_100::get_functions());
-    // // fns.append(&mut eu101_110::get_functions());
-    // // fns.append(&mut eu111_120::get_functions());
-    // // fns.append(&mut eu121_130::get_functions());
-    // // fns.append(&mut eu131_140::get_functions());
+    fns.append(&mut eu091_100::get_functions());
+    fns.append(&mut eu101_110::get_functions());
+    fns.append(&mut eu111_120::get_functions());
+    fns.append(&mut eu121_130::get_functions());
 
-    sol::run(fns, env::args().nth(1), 1);
+    sol::run(fns.clone(), env::args().nth(1), 1);
 }

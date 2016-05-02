@@ -38,6 +38,10 @@ pub mod eu051_060;
 pub mod eu061_070;
 pub mod eu071_080;
 pub mod eu081_090;
+pub mod eu091_100;
+pub mod eu101_110;
+pub mod eu111_120;
+pub mod eu121_130;
 
 
 // Returns a `HashMap` of ("problem number", function to execute) from list of functions fns
@@ -86,5 +90,8 @@ fn execute(fns: Vec<fn() -> String>) {
 
     for _ in 0..fns.len() {
         println!("{}", rx.recv().expect("channel receive failed"));
+    }
+    if fns.len() > 1 {
+        println!("\nSuccessfully solved {} Project Euler problems.", fns.len());
     }
 }
