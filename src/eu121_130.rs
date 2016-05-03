@@ -162,9 +162,9 @@ pub fn eu125() -> String {
     fn palindromic_sof_sqrs(n: usize) -> HashSet<usize> {
         let sofs = sof_sqrs(n);
         let mut res = HashSet::new();
-        for i in 0..sofs.len() - 2 {
-            for j in i + 2..sofs.len() {
-                let v = sofs[j] - sofs[i];
+        for (i, vi) in sofs.iter().enumerate().take(sofs.len() - 2) {
+            for vj in sofs.iter().skip(i + 2) {
+                let v = vj - vi;
                 if v >= n {
                     break;
                 }
@@ -213,8 +213,7 @@ pub fn eu126() -> String {
                 }
             }
         }
-        let pos = xs.iter().position(|&x| x == n).unwrap();
-        pos
+        xs.iter().position(|&x| x == n).unwrap()
     }
 
     let res = solve(1000);
@@ -224,22 +223,22 @@ pub fn eu126() -> String {
 
 /// abc-hits - unimplemented
 pub fn eu127() -> String {
-    format!("eu127 = unimplemented")
+    "eu127 = unimplemented".to_string()
 }
 
 /// Hexagonal tile differences - unimplemented
 pub fn eu128() -> String {
-    format!("eu128 = unimplemented")
+    "eu128 = unimplemented".to_string()
 }
 
 /// Repunit divisibility - unimplemented
 pub fn eu129() -> String {
-    format!("eu129 = unimplemented")
+    "eu129 = unimplemented".to_string()
 }
 
 /// Composites with prime repunit property - unimplemented
 pub fn eu130() -> String {
-    format!("eu130 = unimplemented")
+    "eu130 = unimplemented".to_string()
 }
 
 /// Returns Vec of the Euler solution functions in this crate.

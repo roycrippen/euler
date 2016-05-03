@@ -24,8 +24,8 @@ use euler_solutions::eu121_130;
 /// Run 1 solution given in arg or all solutions concurrently.
 pub fn main() {
     let mut fns = eu001_010::get_functions();
-    fns.append(&mut eu011_020::get_functions());
     fns.append(&mut eu021_030::get_functions());
+    fns.append(&mut eu011_020::get_functions());
     fns.append(&mut eu031_040::get_functions());
     fns.append(&mut eu041_050::get_functions());
     fns.append(&mut eu051_060::get_functions());
@@ -36,6 +36,8 @@ pub fn main() {
     fns.append(&mut eu101_110::get_functions());
     fns.append(&mut eu111_120::get_functions());
     fns.append(&mut eu121_130::get_functions());
+
+    // let fns = eu121_130::get_functions();
 
     sol::run(fns.clone(), env::args().nth(1), 1);
 }

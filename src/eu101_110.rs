@@ -1,5 +1,7 @@
 //! Project Euler solutions for problems 101 through 110.
 
+use std::mem;
+
 extern crate itertools;
 use self::itertools::Itertools;
 
@@ -42,9 +44,9 @@ pub fn eu101() -> String {
         })
     }
 
-    fn check(xs: &Vec<f64>) -> f64 {
+    fn check(xs: &[f64]) -> f64 {
         let l = xs.len();
-        let mut ys = xs.clone();
+        let mut ys = xs.to_vec();
         ys.reverse();
         (0..l).fold(0.0, |acc, i| {
             let pows = (l.pow(i as u32)) as f64;
@@ -54,15 +56,15 @@ pub fn eu101() -> String {
 
     // from http://introcs.cs.princeton.edu/java/95linear/GaussianElimination.java.html
     // Gaussian elimination with partial pivoting
-    fn solve_la(lhs: &Vec<Vec<f64>>, rhs: &Vec<f64>) -> Vec<f64> {
-        let a = &mut lhs.clone();
-        let b = &mut rhs.clone();
+    fn solve_la(lhs: &[Vec<f64>], rhs: &[f64]) -> Vec<f64> {
+        let a = &mut lhs.to_vec();
+        let b = &mut rhs.to_vec();
         let n = b.len();
         for p in 0..n {
 
             // find pivot row and swap
             let mut max = p;
-            for i in p + 1..n {
+            for (i, _) in a.iter().enumerate().take(n).skip(p + 1) {
                 if a[i][p].abs() > a[max][p].abs() {
                     max = i;
                 }
@@ -92,7 +94,7 @@ pub fn eu101() -> String {
         let mut idx = n - 1;
         loop {
             let mut sum = 0.0;
-            for j in idx + 1..n {
+            for (j, _) in x.iter().enumerate().take(n).skip(idx + 1) {
                 sum += a[idx][j] * x[j];
             }
             x[idx] = ((b[idx] - sum) / a[idx][idx]).round();
@@ -111,10 +113,10 @@ pub fn eu101() -> String {
     let mut result = 0.0;
     for i in 1..11 {
         let lhs = get_lhs(i);
-        let rhs = full_rhs.iter().take(i).map(|&x| x).collect_vec();
+        let rhs = full_rhs.iter().take(i).cloned().collect_vec();
         let mut x = solve_la(&lhs, &rhs);
         if i == 2 {
-            assert_eq!(un(2), check(&x))
+            assert_eq!(un(2) as usize, check(&x) as usize)
         }
         result += get_bop(&mut x);
     }
@@ -210,20 +212,20 @@ pub fn eu103() -> String {
     // if xs = [1,2,3,4,5,6,7] check that
     // sum([1,2]) > sum([7]) && sum([1,2,3]>sum([6,7]) && sum([1,2,3,4] > sum([5,6,7])))
     // for all count of { sum(lhs) <= sum(rhs) } == 0
-    fn pass_rule_2(xs: &Vec<usize>) -> bool {
+    fn pass_rule_2(xs: &[usize]) -> bool {
         if xs.len() < 3 {
             return true;
         }
         let t = eu::accumulate(&xs);
         let lhs = t.iter().skip(1).take(xs.len() / 2).collect_vec();
 
-        let t = eu::accumulate(&xs.clone().into_iter().rev().collect_vec());
+        let t = eu::accumulate(&xs.iter().rev().cloned().collect_vec());
         let rhs = t.iter().take(xs.len() / 2).collect_vec();
 
         lhs.iter().zip(rhs.iter()).filter(|&(&x, &y)| x <= y).count() == 0
     }
 
-    fn pass_rule_1(xs: &Vec<usize>) -> bool {
+    fn pass_rule_1(xs: &[usize]) -> bool {
         for i in 3..(xs.len() / 2) + 1 {
             let sums = xs.iter()
                          .combinations_n(i)
@@ -237,20 +239,20 @@ pub fn eu103() -> String {
         true
     }
 
-    fn is_sss(a: &Vec<usize>) -> bool {
+    fn is_sss(a: &[usize]) -> bool {
         if has_duplicates(&a) || !pass_rule_2(&a) || !pass_rule_1(&a) {
             return false;
         }
         true
     }
 
-    fn make_candidates(vec: &Vec<usize>) -> Vec<Vec<usize>> {
+    fn make_candidates(vec: &[usize]) -> Vec<Vec<usize>> {
         let adjust = &vec![-2, -1, 1, 2];
         let mut candidates: Vec<Vec<usize>> = Vec::new();
         for i in 0..vec.len() {
             for j in i..vec.len() {
                 for v in adjust {
-                    let mut t = vec.clone();
+                    let mut t = vec.to_vec();
                     t[j] = (t[i] as i32 + v) as usize;
                     t = t.iter().sorted().iter().dedup().map(|&&x| x).collect_vec();
                     candidates.push(t)
@@ -266,8 +268,8 @@ pub fn eu103() -> String {
         candidates
     }
 
-    fn solve(start: &Vec<usize>) -> String {
-        let mut best = start.clone();
+    fn solve(start: &[usize]) -> String {
+        let mut best = start.to_vec();
         let mut min = vec_sum(&best);
         let candidates = make_candidates(&best);
         for candidate in candidates {
@@ -282,7 +284,7 @@ pub fn eu103() -> String {
         set_string(&best)
     }
 
-    let res = solve(&vec![20, 31, 38, 39, 40, 42, 45]);
+    let res = solve(&[20, 31, 38, 39, 40, 42, 45]);
     assert_eq!(res, "20313839404245".to_string());
     format!("eu103 = {}", res)
 } // 20313839404245
@@ -299,9 +301,10 @@ pub fn eu104() -> String {
     let mut cnt = 1;
     loop {
         a = a + b;
-        let t = a;
-        a = b;
-        b = t;
+        // let t = a;
+        // a = b;
+        // b = t;
+        mem::swap(&mut a, &mut b);
         a = a % big;
         b = b % big;
         cnt += 1;
@@ -345,20 +348,20 @@ pub fn eu105() -> String {
     // if xs = [1,2,3,4,5,6,7] check that
     // sum([1,2]) > sum([7]) && sum([1,2,3]>sum([6,7]) && sum([1,2,3,4] > sum([5,6,7])))
     // for all count of { sum(lhs) <= sum(rhs) } == 0
-    fn pass_rule_2(xs: &Vec<usize>) -> bool {
+    fn pass_rule_2(xs: &[usize]) -> bool {
         if xs.len() < 3 {
             return true;
         }
         let t = eu::accumulate(&xs);
         let lhs = t.iter().skip(1).take(xs.len() / 2).collect_vec();
 
-        let t = eu::accumulate(&xs.clone().into_iter().rev().collect_vec());
+        let t = eu::accumulate(&xs.iter().rev().cloned().collect_vec());
         let rhs = t.iter().take(xs.len() / 2).collect_vec();
 
         lhs.iter().zip(rhs.iter()).filter(|&(&x, &y)| x <= y).count() == 0
     }
 
-    fn pass_rule_1(xs: &Vec<usize>) -> bool {
+    fn pass_rule_1(xs: &[usize]) -> bool {
         for i in 3..(xs.len() / 2) + 1 {
             let sums = xs.iter()
                          .combinations_n(i)
@@ -372,7 +375,7 @@ pub fn eu105() -> String {
         true
     }
 
-    fn is_sss(a: &Vec<usize>) -> bool {
+    fn is_sss(a: &[usize]) -> bool {
         if has_duplicates(&a) || !pass_rule_2(&a) || !pass_rule_1(&a) {
             return false;
         }
@@ -389,7 +392,7 @@ pub fn eu105() -> String {
 
 /// Special subset sums: meta-testing
 pub fn eu106() -> String {
-    fn has_duplicates(xs: &Vec<&usize>, ys: &Vec<&usize>) -> bool {
+    fn has_duplicates(xs: &[&usize], ys: &[&usize]) -> bool {
         let cnt = xs.iter()
                     .take_while(|x| !ys.contains(x))
                     .count();
@@ -405,8 +408,7 @@ pub fn eu106() -> String {
 
     let mut res = 0;
     for (i, v1) in xs.clone().iter().enumerate() {
-        for j in i..xs.len() {
-            let v2 = xs[j].clone();
+        for v2 in xs.iter().skip(i) {
             if v1.len() + v2.len() > vec.len() || v1.len() != v2.len() {
                 continue;
             }
@@ -433,17 +435,16 @@ pub fn eu106() -> String {
 pub fn eu107() -> String {
     fn get_data() -> Vec<Vec<u32>> {
         let buffer = include_str!("../data/p107_network.txt");
-        let xs = buffer.lines()
-                       .map(|x| {
-                           x.split(',')
-                            .map(|x| if x != "-".to_string() { x.parse().unwrap() } else { 0 })
-                            .collect::<Vec<u32>>()
-                       })
-                       .collect();
-        xs
+        buffer.lines()
+              .map(|x| {
+                  x.split(',')
+                   .map(|x| if x != "-" { x.parse().unwrap() } else { 0 })
+                   .collect::<Vec<u32>>()
+              })
+              .collect()
     }
 
-    fn make_graph(xs: &Vec<Vec<u32>>) -> Graph<(), u32> {
+    fn make_graph(xs: &[Vec<u32>]) -> Graph<(), u32> {
         let vec = xs.iter()
                     .enumerate()
                     .flat_map(|(i, v)| {
@@ -513,10 +514,10 @@ pub fn eu109() -> String {
     fn solve(n: usize) -> usize {
         let (all_scores, doubles) = get_scores();
         let mut cnt = 0;
-        for i in 0..all_scores.len() {
-            for j in i..all_scores.len() {
-                for k in 0..doubles.len() {
-                    if all_scores[i] + all_scores[j] + doubles[k] < n {
+        for (i, vi) in all_scores.iter().enumerate() {
+            for vj in all_scores.iter().skip(i) {
+                for vk in &doubles {
+                    if vi + vj + vk < n {
                         cnt += 1;
                     }
                 }
@@ -534,11 +535,11 @@ pub fn eu109() -> String {
 
 /// Diophantine reciprocals II
 pub fn eu110() -> String {
-    fn distinct_solution(xs: &Vec<usize>) -> usize {
+    fn distinct_solution(xs: &[usize]) -> usize {
         (xs.into_iter().fold(1, |acc, x| acc * (2 * x + 1)) + 1) / 2
     }
 
-    fn value(xs: &Vec<usize>) -> usize {
+    fn value(xs: &[usize]) -> usize {
         let primes = vec![2 as usize, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53];
         xs.iter()
           .enumerate()

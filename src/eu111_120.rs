@@ -19,7 +19,7 @@ use self::euler_library::big as eu_big;
 
 /// Primes with runs
 pub fn eu111() -> String {
-    fn from_digits(xs: &Vec<usize>) -> usize {
+    fn from_digits(xs: &[usize]) -> usize {
         let mut n = 0;
         for x in xs {
             n = n * 10 + x
@@ -31,7 +31,7 @@ pub fn eu111() -> String {
         let mut res = Vec::new();
         let ds = repeat(d).take(n).collect::<Vec<usize>>();
         for i in 1..n {
-            if res.len() > 0 {
+            if !res.is_empty() {
                 return res;
             }
             for canidate in populate(i, &ds) {
@@ -41,19 +41,19 @@ pub fn eu111() -> String {
                 }
             }
         }
-        return res;
+        res
     }
 
-    fn populate(cols: usize, ds: &Vec<usize>) -> Vec<Vec<usize>> {
+    fn populate(cols: usize, ds: &[usize]) -> Vec<Vec<usize>> {
         let ranges = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
         let mut res = Vec::new();
         for i in 0..ds.len() {
-            for j in 0..10 {
-                if ds[i] == ranges[j] {
+            for range in &ranges {
+                if ds[i] == *range {
                     continue;
                 }
-                let mut ts = ds.clone();
-                ts[i] = ranges[j];
+                let mut ts = ds.to_vec();
+                ts[i] = *range;
                 if ts[0] == 0 {
                     continue;
                 }
@@ -66,7 +66,7 @@ pub fn eu111() -> String {
         }
         res.sort();
         res.dedup();
-        return res;
+        res
     }
 
     fn solve(n: usize) -> usize {
@@ -105,7 +105,7 @@ pub fn eu112() -> String {
             last = next;
             n /= 10;
         }
-        return !increasing && !decreasing;
+        !increasing && !decreasing
     }
 
     fn solve(proportion: usize) -> usize {
@@ -122,6 +122,8 @@ pub fn eu112() -> String {
         0
     }
 
+    assert_eq!(solve(50), 538);
+
     let res = solve(99);
     assert_eq!(res, 1587000);
     format!("eu112 = {}", res)
@@ -133,14 +135,16 @@ pub fn eu113() -> String {
         let n_fact = eu_big::factorial(n);
         let r_fact = eu_big::factorial(r);
         let n_minus_r_fact = eu_big::factorial(n - r);
-        let res = (n_fact / r_fact) / n_minus_r_fact;
-        res
+        (n_fact / r_fact) / n_minus_r_fact
     }
 
     fn solve(n: usize) -> String {
         let res = c_nr(n + 9, n) + c_nr(n + 10, n) - (10 * n + 2).to_biguint().unwrap();
         res.to_string()
     }
+
+    // test 10^6
+    assert_eq!(solve(6).parse::<usize>().unwrap(), 12951);
 
     let res = solve(100).parse::<usize>().unwrap();
     assert_eq!(res, 51161058134250);
@@ -157,8 +161,8 @@ pub fn eu114() -> String {
         for i in 1..n + 1 {
             let mut sum = ways[i - 1];
             let idx = if m > i { 0 } else { i - m };
-            for j in 0..idx {
-                sum += ways[j];
+            for way in ways.iter().take(idx) {
+                sum += *way;
             }
             if i >= m {
                 sum += 1;
@@ -167,6 +171,8 @@ pub fn eu114() -> String {
         }
         *ways.last().unwrap()
     }
+
+    assert_eq!(count_blocks(7, 3), 17);
 
     let res = count_blocks(50, 3);
     assert_eq!(res, 16475640049);
@@ -180,8 +186,8 @@ pub fn eu115() -> String {
     fn count_blocks(m: usize, n: usize, ways: &mut Vec<usize>) -> usize {
         let mut sum = ways[n - 1];
         let idx = if m > n { 0 } else { n - m };
-        for j in 0..idx {
-            sum += ways[j];
+        for way in ways.iter().take(idx) {
+            sum += *way;
         }
         if n >= m {
             sum += 1;
@@ -200,6 +206,8 @@ pub fn eu115() -> String {
         0
     }
 
+    assert_eq!(solve(3, 1_000_000), 30);
+
     let res = solve(50, 1_000_000);
     assert_eq!(res, 168);
     format!("eu115 = {}", res)
@@ -212,7 +220,7 @@ pub fn eu116() -> String {
     fn count_blocks(n: usize, m: usize) -> usize {
         let mut xs = vec![0; n + 1];
         xs[0] = 1;
-        for i in 1..n + 1 {
+        for (i, _) in xs.clone().iter().enumerate().take(n + 1).skip(1) {
             xs[i] += xs[i - 1];
             if i >= m {
                 xs[i] += xs[i - m];
@@ -220,6 +228,10 @@ pub fn eu116() -> String {
         }
         xs[n] - 1
     }
+
+    assert_eq!(count_blocks(5, 2), 7);
+    assert_eq!(count_blocks(5, 3), 3);
+    assert_eq!(count_blocks(5, 4), 2);
 
     let res = count_blocks(50, 4) + count_blocks(50, 3) + count_blocks(50, 2);
     assert_eq!(res, 20492570929);
@@ -233,7 +245,7 @@ pub fn eu117() -> String {
     fn solve(n: usize) -> usize {
         let mut xs = vec![0; n + 1];
         xs[0] = 1;
-        for i in 1..n + 1 {
+        for (i, _) in xs.clone().iter().enumerate().take(n + 1).skip(1) {
             let start = cmp::max((i as i32 - 4), 0) as usize;
             let sub = xs.clone();
             let sub = &sub[start..];
@@ -241,6 +253,8 @@ pub fn eu117() -> String {
         }
         xs[n]
     }
+
+    assert_eq!(solve(5), 15);
 
     let res = solve(50);
     assert_eq!(res, 100808458960497);
@@ -255,8 +269,8 @@ pub fn eu118() -> String {
         }
         let mut n = 0;
         let mut ans = 0;
-        for i in idx..9 {
-            n = 10 * n + ds[i];
+        for (i, item) in ds.iter().enumerate().take(9).skip(idx) {
+            n = 10 * n + item;
             if n > cur && p.is_prime(n) {
                 ans += count_prime_sets(ds, n, i + 1, p);
             }
@@ -293,7 +307,7 @@ pub fn eu119() -> String {
     fn get_exp(n: usize) -> Option<u32> {
         let sod = sum_of_digits(n);
         let exp = ((n as f64).log10() / (sod as f64).log10()).round() as u32;
-        if sod.pow(exp) == n { return Some(exp) } else { return None }
+        if sod.pow(exp) == n { Some(exp) } else { None }
     }
 
     fn make_table() -> Vec<usize> {
@@ -316,7 +330,11 @@ pub fn eu119() -> String {
         res
     }
 
-    let res = make_table()[29] as usize;
+    let table = make_table();
+    // test n = 10
+    assert_eq!(table[9], 614656);
+
+    let res = table[29];
     assert_eq!(res, 248155780267521);
     format!("eu119 = {}", res)
 } // 248155780267521

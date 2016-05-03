@@ -130,23 +130,31 @@ pub fn eu075() -> String {
 
 /// Counting summations
 pub fn eu076() -> String {
-    let mut res = vec![0; 101];
-    res[0] = 1;
-    for i in 1..100 {
-        for j in i..101 {
-            res[j] += res[j - i];
+    fn solve(n: usize) -> usize {
+        if n == 0 {
+            return 0;
         }
+        let mut sum = vec![0; n+1];
+        sum[0] = 1;
+        for i in 1..n {
+            for (j, _) in sum.clone().iter().enumerate().take(n + 1).skip(i) {
+                sum[j] += sum[j - i];
+            }
+        }
+        sum[n]
     }
+    assert_eq!(solve(5), 6);
 
-    assert_eq!(res[100], 190569291);
-    format!("eu076 = {:?}", res[100])
+    let res = solve(100);
+    assert_eq!(res, 190569291);
+    format!("eu076 = {:?}", res)
 } // 190569291
 
 /// Prime summations
 pub fn eu077() -> String {
     fn prime_sumation() -> usize {
         let mut ps: Vec<usize> = vec![0; 1001 as usize];
-        for i in 2..1000 {
+        for (i, _) in ps.clone().iter().enumerate().take(1000).skip(2) {
             let mut sum = 0;
             for j in 1..i {
                 sum += primes::sopf(j) * ps[i - j]
@@ -205,9 +213,9 @@ pub fn eu079() -> String {
 
     fn get_next(mut val: u8, xss: Vec<Vec<u8>>, set: Vec<u8>) -> u8 {
         for j in 1..3 {
-            for i in 0..xss.len() {
-                if xss[i][j] == val {
-                    let t = get_next(xss[i][j - 1], xss.clone(), set.clone());
+            for xs in &xss {
+                if xs[j] == val {
+                    let t = get_next(xs[j - 1], xss.clone(), set.clone());
                     if set.contains(&t) {
                         break;
                     }
@@ -225,9 +233,9 @@ pub fn eu079() -> String {
         val = get_next(val, xss.clone(), set.clone());
         set.push(val);
         'outer: for j in 0..2 {
-            for i in 0..xss.len() {
-                if xss[i][j] == val {
-                    val = xss[i][j + 1];
+            for xs in &xss {
+                if xs[j] == val {
+                    val = xs[j + 1];
                     break 'outer;
                 }
             }

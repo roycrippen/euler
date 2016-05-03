@@ -54,7 +54,7 @@ pub fn eu092() -> String {
     };
 
     let mut table: Vec<usize> = vec![0; TABLE_SIZE];
-    for i in 1..TABLE_SIZE {
+    for (i, _) in table.clone().iter().enumerate().take(TABLE_SIZE).skip(1) {
         let mut val = i;
         while val != 1 && val != 89 {
             val = sum_sq(val)
@@ -317,18 +317,24 @@ pub fn eu096() -> String {
         }
     }
 
-    impl Grid {
-        fn new() -> Grid {
+    impl Default for Grid {
+        fn default() -> Grid {
             let cell = Cell { v: '0', possible: ['1', '2', '3', '4', '5', '6', '7', '8', '9'] };
             let row = Row { c: [cell; 9] };
             Grid { r: [row; 9] }
+        }
+    }
+
+    impl Grid {
+        fn new() -> Grid {
+            Default::default()
         }
 
         // take a text game vector and transform it to a new game grid
         fn new_game(xss: Vec<Vec<char>>) -> Grid {
             let mut g = Grid::new();
-            for i in 0..9 {
-                for j in 0..9 {
+            for (i, _) in xss.iter().enumerate().take(xss.len()) {
+                for (j, _) in xss.iter().enumerate().take(xss.len()) {
                     g.r[i].c[j].v = xss[i][j]
                 }
             }
@@ -471,11 +477,11 @@ pub fn eu096() -> String {
         }
 
         fn solve(&self) -> Grid {
-            let grid = &mut self.clone();
+            let mut grid = *self;
             grid.adjust_possible_rows_cols();
             grid.adjust_possible_boxes();
             if grid.is_solved() {
-                return *grid;
+                return grid;
             }
             if !self.is_valid_grid() {
                 return *self;
@@ -487,7 +493,7 @@ pub fn eu096() -> String {
                     grid.update(i, j, 1);
                     return grid.solve();
                 }
-                let mut grid_copy = grid.clone();
+                let mut grid_copy = grid;
                 grid_copy.update(i, j, 1);
                 grid_copy = grid_copy.solve();
                 if grid_copy.is_solved() {
@@ -686,7 +692,7 @@ pub fn eu100() -> String {
         max += n;
     }
 
-    assert_eq!(b, 756872327473.0);
+    assert_eq!(b as usize, 756872327473);
     format!("eu100 = {}", b)
 } // 756872327473
 
