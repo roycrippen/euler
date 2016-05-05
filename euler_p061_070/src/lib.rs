@@ -1,22 +1,24 @@
 //! Project Euler solutions for problems 61 through 70.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::cmp;
 
-extern crate num;
-use self::num::BigUint;
-use self::num::bigint::ToBigUint;
-
-extern crate itertools;
-use self::itertools::Itertools;
-
 extern crate primal;
 
+extern crate itertools;
+use itertools::Itertools;
+
+extern crate num;
+use num::BigUint;
+use num::bigint::ToBigUint;
+
 extern crate euler_library;
-use self::euler_library::common as eu;
-use self::euler_library::big as eu_big;
+use euler_library::common as eu;
+use euler_library::big as eu_big;
 
 /// Cyclical figurate numbers
-pub fn eu061() -> String {
+pub fn p061() -> String {
     fn is_cyclic(left: usize, right: usize) -> bool {
         right / 100 == left % 100
     }
@@ -91,11 +93,11 @@ pub fn eu061() -> String {
 
     let res = eval(get_polygonals());
     assert_eq!(res, 28684);
-    format!("eu061 = {}", eval(get_polygonals()))
+    format!("p061 = {}", eval(get_polygonals()))
 } // 28684
 
 /// Cubic permutations
-pub fn eu062() -> String {
+pub fn p062() -> String {
     let mut xs: Vec<(usize, usize)> = Vec::new();
     for i in 300..10000 {
         let cube = (i as f64).powf(3.) as usize;
@@ -119,11 +121,11 @@ pub fn eu062() -> String {
     }
 
     assert_eq!(res, 127035954683);
-    format!("eu062 = {}", res)
+    format!("p062 = {}", res)
 } // 127035954683 == 5027^3
 
 /// Powerful digit counts
-pub fn eu063() -> String {
+pub fn p063() -> String {
     let mut cnt = 1;
     for m in 1..11 {
         for n in 1..100 {
@@ -135,11 +137,11 @@ pub fn eu063() -> String {
     }
 
     assert_eq!(cnt, 49);
-    format!("eu063 = {}", cnt)
+    format!("p063 = {}", cnt)
 } // 49
 
 /// Odd period square roots
-pub fn eu064() -> String {
+pub fn p064() -> String {
     fn is_odd_period(n: u32) -> bool {
         let a0 = (n as f32).sqrt() as u32;
         if a0 * a0 == n {
@@ -160,11 +162,11 @@ pub fn eu064() -> String {
 
     let cnt = (1..10001).fold(0, |acc, n| if is_odd_period(n) { acc + 1 } else { acc });
     assert_eq!(cnt, 1322);
-    format!("eu064 = {}", cnt)
+    format!("p064 = {}", cnt)
 } // 1322
 
 /// Convergents of e
-pub fn eu065() -> String {
+pub fn p065() -> String {
     let e = [1].iter()
                .cycle()
                .enumerate()
@@ -181,11 +183,11 @@ pub fn eu065() -> String {
                   .fold(0 as u32, |acc, &x| acc + (x as u32) - 48);
 
     assert_eq!(sum, 272);
-    format!("eu065 = {}", sum)
+    format!("p065 = {}", sum)
 } // 272
 
 /// Diophantine equation
-pub fn eu066() -> String {
+pub fn p066() -> String {
     // pell's equation x^2 -Dy^2
     // sqrt(D) expansion and test
     fn pell_min(d: usize) -> BigUint {
@@ -223,11 +225,11 @@ pub fn eu066() -> String {
     }
 
     assert_eq!(max.0, 661);
-    format!("eu066 = {}", max.0)
+    format!("p066 = {}", max.0)
 } // 661
 
 /// Maximum path sum II
-pub fn eu067() -> String {
+pub fn p067() -> String {
     fn get_data() -> Vec<Vec<u32>> {
         let buffer = include_str!("../data/p067_triangle.txt");
         buffer.lines()
@@ -247,11 +249,11 @@ pub fn eu067() -> String {
     }
 
     assert_eq!(xss[0][0], 7273);
-    format!("eu067 = {}", xss[0][0])
+    format!("p067 = {}", xss[0][0])
 } // 7273
 
 /// Magic 5-gon ring
-pub fn eu068() -> String {
+pub fn p068() -> String {
 
     #[derive(Debug, Clone, PartialEq, Ord, Eq, PartialOrd)]
     struct Ring {
@@ -335,11 +337,11 @@ pub fn eu068() -> String {
     ress.sort();
     let res = ress.last().unwrap();
     assert_eq!(*res, "6531031914842725".to_string());
-    format!("eu068 = {}", res)
+    format!("p068 = {}", res)
 } // 6531031914842725
 
 /// Totient maximum
-pub fn eu069() -> String {
+pub fn p069() -> String {
     let mut max = 1.0;
     let mut idx = 1;
     for (i, x) in eu::phis(1_000_000).iter().enumerate().skip(1) {
@@ -350,11 +352,11 @@ pub fn eu069() -> String {
     }
 
     assert_eq!(idx, 510510);
-    format!("eu069 = {}", idx)
+    format!("p069 = {}", idx)
 } // 510510
 
 /// Totient permutation
-pub fn eu070() -> String {
+pub fn p070() -> String {
     let primes = primal::Primes::all().take(10_000).collect::<Vec<_>>();
 
     let mut best = 1;
@@ -376,13 +378,13 @@ pub fn eu070() -> String {
     }
 
     assert_eq!(best, 8319823);
-    format!("eu070 = {}", best)
+    format!("p070 = {}", best)
 } // 8319823
 
 /// Totient permutation
 // first attempt; works, uses phis function and straight forward
 // but quite a bit slower
-pub fn eu070a() -> String {
+pub fn p070a() -> String {
     let mut best = 1;
     let mut best_ratio: f64 = 1_000.0;
     for (n, phi) in eu::phis(10_000_000).into_iter().enumerate().skip(8_000_000) {
@@ -394,10 +396,12 @@ pub fn eu070a() -> String {
     }
 
     assert_eq!(best, 8319823);
-    format!("eu070a = {}", best)
+    format!("p070a = {}", best)
 } // 8319823
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu061, eu062, eu063, eu064, eu065, eu066, eu067, eu068, eu069, eu070]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    // Euler solutions in this crate.
+    (61,
+     vec![p061, p062, p063, p064, p065, p066, p067, p068, p069, p070])
 }

@@ -1,0 +1,10 @@
+[package]
+name = "euler_p071_080"
+version = "0.1.0"
+authors = ["roycrippen <roycrippen@gmail.com>"]
+
+[dependencies]
+
+
+[dependencies.euler_library]
+git = "https://github.com/roycrippen/euler_library"

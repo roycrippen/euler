@@ -1,24 +1,26 @@
 //! Project Euler solutions for problems 111 through 120.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::iter::repeat;
 use std::cmp;
 use std::usize;
 
-extern crate num;
-use self::num::BigUint;
-use self::num::bigint::ToBigUint;
-
 extern crate primal;
 
+extern crate num;
+use num::BigUint;
+use num::bigint::ToBigUint;
+
 extern crate permutohedron;
-use self::permutohedron::LexicalPermutation;
+use permutohedron::LexicalPermutation;
 
 extern crate euler_library;
-use self::euler_library::common as eu;
-use self::euler_library::big as eu_big;
+use euler_library::common as eu;
+use euler_library::big as eu_big;
 
 /// Primes with runs
-pub fn eu111() -> String {
+pub fn p111() -> String {
     fn from_digits(xs: &[usize]) -> usize {
         let mut n = 0;
         for x in xs {
@@ -81,11 +83,11 @@ pub fn eu111() -> String {
 
     let res = solve(10);
     assert_eq!(res, 612407567715);
-    format!("eu111 = {}", res)
+    format!("p111 = {}", res)
 } // 612407567715
 
 /// Bouncy numbers
-pub fn eu112() -> String {
+pub fn p112() -> String {
     fn bouncy(mut n: usize) -> bool {
         let mut increasing = true;
         let mut decreasing = true;
@@ -126,11 +128,11 @@ pub fn eu112() -> String {
 
     let res = solve(99);
     assert_eq!(res, 1587000);
-    format!("eu112 = {}", res)
+    format!("p112 = {}", res)
 } // 1587000
 
 /// Non-bouncy numbers
-pub fn eu113() -> String {
+pub fn p113() -> String {
     fn c_nr(n: usize, r: usize) -> BigUint {
         let n_fact = eu_big::factorial(n);
         let r_fact = eu_big::factorial(r);
@@ -148,12 +150,12 @@ pub fn eu113() -> String {
 
     let res = solve(100).parse::<usize>().unwrap();
     assert_eq!(res, 51161058134250);
-    format!("eu113 = {}", res)
+    format!("p113 = {}", res)
 } // 51161058134250
 
 
 /// Counting block combinations I
-pub fn eu114() -> String {
+pub fn p114() -> String {
     // n=total block length, m=min color length
     // return combination count for all color length from m to n
     fn count_blocks(n: usize, m: usize) -> usize {
@@ -176,11 +178,11 @@ pub fn eu114() -> String {
 
     let res = count_blocks(50, 3);
     assert_eq!(res, 16475640049);
-    format!("eu114 = {}", res)
+    format!("p114 = {}", res)
 } // 16475640049
 
 /// Counting block combinations II
-pub fn eu115() -> String {
+pub fn p115() -> String {
     // n=total block length, m:color length
     // return combination count for a single length m
     fn count_blocks(m: usize, n: usize, ways: &mut Vec<usize>) -> usize {
@@ -210,11 +212,11 @@ pub fn eu115() -> String {
 
     let res = solve(50, 1_000_000);
     assert_eq!(res, 168);
-    format!("eu115 = {}", res)
+    format!("p115 = {}", res)
 } // 168
 
 /// Red, green or blue tiles
-pub fn eu116() -> String {
+pub fn p116() -> String {
     // n=total block length, m:color length
     // return combination count for a single length m
     fn count_blocks(n: usize, m: usize) -> usize {
@@ -235,11 +237,11 @@ pub fn eu116() -> String {
 
     let res = count_blocks(50, 4) + count_blocks(50, 3) + count_blocks(50, 2);
     assert_eq!(res, 20492570929);
-    format!("eu116 = {}", res)
+    format!("p116 = {}", res)
 } // 20492570929
 
 /// Red, green, and blue tiles
-pub fn eu117() -> String {
+pub fn p117() -> String {
     // n=total block length, m:color length
     // return combination count for a single length m
     fn solve(n: usize) -> usize {
@@ -258,11 +260,11 @@ pub fn eu117() -> String {
 
     let res = solve(50);
     assert_eq!(res, 100808458960497);
-    format!("eu117 = {}", res)
+    format!("p117 = {}", res)
 } // 100808458960497
 
 /// Pandigital prime sets
-pub fn eu118() -> String {
+pub fn p118() -> String {
     fn count_prime_sets(ds: &[usize], cur: usize, idx: usize, p: &primal::Sieve) -> usize {
         if idx == 9 {
             return 1;
@@ -295,11 +297,11 @@ pub fn eu118() -> String {
 
     let res = solve();
     assert_eq!(res, 44680);
-    format!("eu118 = {}", res)
+    format!("p118 = {}", res)
 } // 44680
 
 /// Digit power sum
-pub fn eu119() -> String {
+pub fn p119() -> String {
     fn sum_of_digits(n: usize) -> usize {
         eu::to_bytes(n).into_iter().fold(0, |acc, x| acc + x as usize - 48)
     }
@@ -336,19 +338,20 @@ pub fn eu119() -> String {
 
     let res = table[29];
     assert_eq!(res, 248155780267521);
-    format!("eu119 = {}", res)
+    format!("p119 = {}", res)
 } // 248155780267521
 
 /// Square remainders
-pub fn eu120() -> String {
+pub fn p120() -> String {
     // https://benpyeh.com/2013/06/23/project-euler-120/
     let res = (3..1001).fold(0,
                              |acc, a| if a % 2 == 0 { acc + a * a - 2 * a } else { acc + a * a - a });
     assert_eq!(res, 333082500);
-    format!("eu120 = {}", res)
+    format!("p120 = {}", res)
 } // 333082500
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu111, eu112, eu113, eu114, eu115, eu116, eu117, eu118, eu119, eu120]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    (111,
+     vec![p111, p112, p113, p114, p115, p116, p117, p118, p119, p120])
 }

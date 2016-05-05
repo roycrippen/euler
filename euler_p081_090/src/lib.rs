@@ -1,24 +1,25 @@
 //! Project Euler solutions for problems 81 through 90.
-
+//!
+//! This crate is designed to be used via crate `euler`.
 use std::cmp;
 use std::f64::EPSILON;
 
-extern crate itertools;
-use self::itertools::Itertools;
-
 extern crate primal;
 
+extern crate itertools;
+use itertools::Itertools;
+
 extern crate rand;
-use self::rand::{Rng, thread_rng};
+use rand::{Rng, thread_rng};
 
 extern crate numerals;
-use self::numerals::roman::Roman;
+use numerals::roman::Roman;
 
 extern crate petgraph;
-use self::petgraph::*;
-use self::petgraph::algo::dijkstra;
+use petgraph::*;
+use petgraph::algo::dijkstra;
 
-/// Returns data from matrix.txt. Used by eu081, eu082 and eu083
+/// Returns data from matrix.txt. Used by p081, p082 and p083
 pub fn get_data() -> Vec<usize> {
     let buffer = include_str!("../data/matrix.txt");
     buffer.lines()
@@ -31,7 +32,7 @@ pub fn get_data() -> Vec<usize> {
 }
 
 /// Path sum: two ways
-pub fn eu081() -> String {
+pub fn p081() -> String {
     fn get_edges(i: u32, ws: &[usize], cols: u32) -> Vec<(u32, u32, usize)> {
         // first node
         if i == 0 {
@@ -91,11 +92,11 @@ pub fn eu081() -> String {
     let res = solve(g, idxs);
 
     assert_eq!(res, 427337);
-    format!("eu081 = {}", res)
+    format!("p081 = {}", res)
 } // 427337
 
 /// Path sum: three ways
-pub fn eu082() -> String {
+pub fn p082() -> String {
     fn get_edges(i: u32, ws: &[usize], cols: u32) -> Vec<(u32, u32, usize)> {
         // first nodes (whole first column)
         if i == 0 {
@@ -168,11 +169,11 @@ pub fn eu082() -> String {
     let idxs = g.node_indices().collect::<Vec<_>>();
     let (res, _) = solve(g, idxs);
     assert_eq!(res, 260324);
-    format!("eu082 = {}", res)
+    format!("p082 = {}", res)
 } // 260324
 
 /// Path sum: four ways
-pub fn eu083() -> String {
+pub fn p083() -> String {
     fn get_edges(i: u32, ws: &[usize], cols: u32) -> Vec<(u32, u32, usize)> {
         // first node
         if i == 0 {
@@ -239,11 +240,11 @@ pub fn eu083() -> String {
     let idxs = g.node_indices().collect::<Vec<_>>();
     let res = solve(g, idxs);
     assert_eq!(res, 425185);
-    format!("eu083 = {}", res)
+    format!("p083 = {}", res)
 } // 425185
 
 /// Monopoly odds
-pub fn eu084() -> String {
+pub fn p084() -> String {
     #[cfg_attr(rustfmt, rustfmt_skip)]
     #[derive(Debug, Eq, PartialEq, Clone, Copy)]
     enum B { GO = 0, A1, CC1, A2, T1, R1, B1, CH1, B2, B3, JAIL, C1, U1, C2, C3, R2, D1, CC2, D2,
@@ -417,11 +418,11 @@ pub fn eu084() -> String {
 
     let res = most.join("").parse::<usize>().unwrap();
     assert_eq!(res, 101524);
-    format!("eu084 = {}", most.join(""))
+    format!("p084 = {}", most.join(""))
 } // 101524 jail:r2:e3
 
 /// Counting rectangles
-pub fn eu085() -> String {
+pub fn p085() -> String {
     const MAX: i64 = 2_000_000;
     let mut diff = MAX;
     let mut area = 0;
@@ -437,11 +438,11 @@ pub fn eu085() -> String {
         }
     }
     assert_eq!(area, 2772);
-    format!("eu085 = {}", area)
+    format!("p085 = {}", area)
 } // 2772
 
 /// Cuboid route
-pub fn eu086() -> String {
+pub fn p086() -> String {
     let mut cnt = 0.0;
     let mut j: f64 = 2.0;
     while cnt <= 1_000_000.0 {
@@ -456,11 +457,11 @@ pub fn eu086() -> String {
     }
 
     assert_eq!(j as usize, 1818);
-    format!("eu086 = {}", j)
+    format!("p086 = {}", j)
 } // 1818
 
 /// Prime power triples
-pub fn eu087() -> String {
+pub fn p087() -> String {
     const MAX: usize = 50_000_000;
     let primes = primal::Primes::all()
                      .take_while(|&p| p < ((MAX as f64).sqrt() * 1.1) as usize)
@@ -485,11 +486,11 @@ pub fn eu087() -> String {
                     .fold(0, |acc, _| acc + 1);
 
     assert_eq!(res, 1097343);
-    format!("eu087 = {}", res)
+    format!("p087 = {}", res)
 } // 1097343
 
 /// Product-sum numbers
-pub fn eu088() -> String {
+pub fn p088() -> String {
     fn merge(a: usize, b: usize, mut cache: &mut Vec<Vec<Vec<usize>>>, mut res: &mut Vec<Vec<usize>>) {
         if !cache[a].is_empty() && cache[a][0][0] == 0 {
             cache[a] = factor_lists(a, &mut cache);
@@ -546,11 +547,11 @@ pub fn eu088() -> String {
 
     let res = sum(&k);
     assert_eq!(res, 7587457);
-    format!("eu088 = {}", sum(&k))
+    format!("p088 = {}", sum(&k))
 } // 7587457
 
 /// Roman numerals
-pub fn eu089() -> String {
+pub fn p089() -> String {
     let romans_in = include_str!("../data/p089_roman.txt")
                         .lines()
                         .map(|s| s.to_string())
@@ -573,11 +574,11 @@ pub fn eu089() -> String {
                                    .fold(0, |acc, x| acc + x);
 
     assert_eq!(char_count_in - char_count_out, 743);
-    format!("eu089 = {}", char_count_in - char_count_out)
+    format!("p089 = {}", char_count_in - char_count_out)
 } // 743
 
 /// Cube digit pairs
-pub fn eu090() -> String {
+pub fn p090() -> String {
     let sqrs = vec![(0, 1), (0, 4), (0, 6), (1, 6), (2, 5), (3, 6), (4, 6), (8, 1)];
 
     let is_valid = |xs: &Vec<usize>, ys: &Vec<usize>| -> bool {
@@ -600,10 +601,12 @@ pub fn eu090() -> String {
                   .fold(0, |acc, x| if x { acc + 1 } else { acc });
 
     assert_eq!(cnt, 1217);
-    format!("eu090 = {}", cnt)
+    format!("p090 = {}", cnt)
 } // 1217
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu081, eu082, eu083, eu084, eu085, eu086, eu087, eu088, eu089, eu090]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    // Euler solutions in this crate.
+    (81,
+     vec![p081, p082, p083, p084, p085, p086, p087, p088, p089, p090])
 }

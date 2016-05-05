@@ -1,38 +1,40 @@
 //! Project Euler solutions for problems 71 through 80.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 extern crate euler_library;
-use self::euler_library::common as eu;
-use self::euler_library::primes;
-use self::euler_library::big as eu_big;
+use euler_library::common as eu;
+use euler_library::primes;
+use euler_library::big as eu_big;
 
 /// Ordered fractions
-pub fn eu071() -> String {
+pub fn p071() -> String {
     let (mut answer, mut c) = (2, 5);
     let (b, d) = (3, 7);
     while c + d <= 1_000_000 {
         answer += b;
         c += d;
     }
-    format!("eu071 = {}", answer)
+    format!("p071 = {}", answer)
 } // 428570
 
 /// Counting fractions
-pub fn eu072() -> String {
+pub fn p072() -> String {
     let sum = eu::phis(1_000_000).iter().fold(0, |acc, x| acc + x);
-    format!("eu072 = {}", sum - 1)
+    format!("p072 = {}", sum - 1)
 } // 303963552391
 
 /// Counting fractions in a range
-pub fn eu073() -> String {
+pub fn p073() -> String {
     let phi = eu::phis(12_000);
     let c = phi.iter().skip(6).fold(0, |acc, x| acc + x);
     // next line logic: c*1/2 - c*1/3 == c/6
     let res = c / 6;
-    format!("eu073 = {}", res - 2)
+    format!("p073 = {}", res - 2)
 } // 7295372
 
 /// Digit factorial chains
-pub fn eu074() -> String {
+pub fn p074() -> String {
     static FACT_SMALL: [usize; 10] = [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
 
     fn fact_sum(n: usize) -> usize {
@@ -75,11 +77,11 @@ pub fn eu074() -> String {
     let sum = (3..1_000_000).fold(0,
                                   |acc, x| if fact_non_repeat_cnt(x) == 60 { acc + 1 } else { acc });
     assert_eq!(sum, 402);
-    format!("eu074 = {}", sum)
+    format!("p074 = {}", sum)
 } // 402
 
 /// Singular integer right triangles
-pub fn eu075() -> String {
+pub fn p075() -> String {
     fn pyth(n: usize) -> Vec<usize> {
         fn p(n: usize, a: usize, b: usize, c: usize) -> Vec<usize> {
             if a + b + c >= n {
@@ -125,11 +127,11 @@ pub fn eu075() -> String {
 
     let res = table.into_iter().fold(0, |acc, x| if x == 1 { acc + x } else { acc });
     assert_eq!(res, 161667);
-    format!("eu075 = {}", res)
+    format!("p075 = {}", res)
 } // 161667
 
 /// Counting summations
-pub fn eu076() -> String {
+pub fn p076() -> String {
     fn solve(n: usize) -> usize {
         if n == 0 {
             return 0;
@@ -147,11 +149,11 @@ pub fn eu076() -> String {
 
     let res = solve(100);
     assert_eq!(res, 190569291);
-    format!("eu076 = {:?}", res)
+    format!("p076 = {:?}", res)
 } // 190569291
 
 /// Prime summations
-pub fn eu077() -> String {
+pub fn p077() -> String {
     fn prime_sumation() -> usize {
         let mut ps: Vec<usize> = vec![0; 1001 as usize];
         for (i, _) in ps.clone().iter().enumerate().take(1000).skip(2) {
@@ -169,11 +171,11 @@ pub fn eu077() -> String {
 
     let res = prime_sumation();
     assert_eq!(res, 71);
-    format!("eu077 = {}", res)
+    format!("p077 = {}", res)
 } // 71
 
 /// Coin partitions
-pub fn eu078() -> String {
+pub fn p078() -> String {
     // custom version of euler_library::integer_partitions()
     fn partitions() -> usize {
         // list of pentagonal numbers
@@ -199,11 +201,11 @@ pub fn eu078() -> String {
 
     let res = partitions();
     assert_eq!(res, 55374);
-    format!("eu078 = {}", res)
+    format!("p078 = {}", res)
 } // 55374
 
 /// Passcode derivation
-pub fn eu079() -> String {
+pub fn p079() -> String {
     let mut xs = vec![319, 680, 180, 690, 129, 620, 762, 689, 762, 318, 368, 710, 720, 710, 629, 168, 160, 689, 716,
                       731, 736, 729, 316, 729, 729, 710, 769, 290, 719, 680, 318, 389, 162, 289, 162, 718, 729, 319,
                       790, 680, 890, 362, 319, 760, 316, 729, 380, 319, 728, 716];
@@ -244,11 +246,11 @@ pub fn eu079() -> String {
 
     let res = eu::from_bytes::<usize>(&set).unwrap();
     assert_eq!(res, 73162890);
-    format!("eu079 = {:?}", res)
+    format!("p079 = {:?}", res)
 } // 73162890
 
 /// Square root digital expansion
-pub fn eu080() -> String {
+pub fn p080() -> String {
     let perfect = vec![4, 9, 16, 25, 36, 49, 64, 81, 100];
     let sum = (2..101)
                   .filter(|x| !perfect.contains(x))
@@ -258,10 +260,12 @@ pub fn eu080() -> String {
                   });
 
     assert_eq!(sum, 40886);
-    format!("eu080 = {}", sum)
+    format!("p080 = {}", sum)
 } // 40886
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu071, eu072, eu073, eu074, eu075, eu076, eu077, eu078, eu079, eu080]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    // Euler solutions in this crate.
+    (71,
+     vec![p071, p072, p073, p074, p075, p076, p077, p078, p079, p080])
 }

@@ -8,25 +8,27 @@ Please read the [API documentation here](http://roycrippen.github.io/euler_solut
 
 ## Using this crate
 
-Clone this repository, move to euler_soutions directory and build.
+Just add the following to your [`Cargo.toml`](http://crates.io/):
 ```
-...some_path/euler_soutions/cargo build --release
-```
-
-Run all solutions.
-```
-...some_path/euler_soutions/cargo run --release
+[dependencies.euler]
+git = "https://github.com/roycrippen/euler"
 ```
 
-Or run one solution, example run solution 88.
-```
-...some_path/euler_soutions/cargo run --release 88
+And add this to your root crate.
+```rust
+extern crate euler;
 ```
 
-Much faster by moving to release directory and running binary.
-```
-...some_path/euler_soutions/target/release/time ./eu_all
-...some_path/euler_soutions/target/release/time ./eu_all 88
+# Example
+
+```rust
+extern crate euler;
+
+// Runs all solutions concurrently.
+euler::run_all();
+
+// test solution 16
+! assert_eq!(euler::euler_p011_020::p016(), "p016 = 1366");
 ```
 
 Result list will roughly be ordered by execution time, slowest last.

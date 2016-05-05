@@ -1,0 +1,12 @@
+[package]
+name = "euler_p111_120"
+version = "0.1.0"
+authors = ["roycrippen <roycrippen@gmail.com>"]
+
+[dependencies]
+primal = "*"
+num = "*"
+permutohedron = "*"
+
+[dependencies.euler_library]
+git = "https://github.com/roycrippen/euler_library"

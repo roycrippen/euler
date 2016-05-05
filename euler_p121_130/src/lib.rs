@@ -1,4 +1,6 @@
 //! Project Euler solutions for problems 121 through 130.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -6,10 +8,10 @@ use std::collections::HashSet;
 extern crate primal;
 
 extern crate euler_library;
-use self::euler_library::common as eu;
+use euler_library::common as eu;
 
 /// Disc game prize fund
-pub fn eu121() -> String {
+pub fn p121() -> String {
     // hints from https://github.com/juanplopes/euler/blob/master/121.boo
     // calculate p for a blue/red winning set (ie more bluea than red)
     // for n = 4, p([1,0,1,1] = 1/2 * 2/3 * 1/4 * 1/5)
@@ -44,11 +46,11 @@ pub fn eu121() -> String {
 
     let res = solve(15);
     assert_eq!(res, 2269);
-    format!("eu121 = {}", res)
+    format!("p121 = {}", res)
 } // 2269
 
 /// Efficient exponentiation
-pub fn eu122() -> String {
+pub fn p122() -> String {
     fn path(n: usize, p: &mut HashMap<usize, usize>, lvl: &mut Vec<usize>) -> Vec<usize> {
         match n {
             0 => return vec![],
@@ -104,12 +106,12 @@ pub fn eu122() -> String {
 
     let res = solve(200);
     assert_eq!(res, 1582);
-    format!("eu122 = {}", res)
+    format!("p122 = {}", res)
 } // 1582
 
 
 /// Prime square remainders
-pub fn eu123() -> String {
+pub fn p123() -> String {
     fn solve() -> usize {
         let max = (10 as usize).pow(10);
         let sieve = primal::Sieve::new(250_000);
@@ -118,11 +120,11 @@ pub fn eu123() -> String {
 
     let res = solve();
     assert_eq!(res, 21035);
-    format!("eu123 = {}", res)
+    format!("p123 = {}", res)
 } // 21035
 
 /// Ordered radicals
-pub fn eu124() -> String {
+pub fn p124() -> String {
     const MAX: usize = 100_001;
 
     fn get_rads() -> Vec<(usize, usize)> {
@@ -143,12 +145,12 @@ pub fn eu124() -> String {
 
     let (_, res) = get_rads()[10_000];
     assert_eq!(res, 21417);
-    format!("eu124 = {}", res)
+    format!("p124 = {}", res)
 } // 21417
 
 
 /// Palindromic sums
-pub fn eu125() -> String {
+pub fn p125() -> String {
     fn sof_sqrs(n: usize) -> Vec<usize> {
         let limit = (n as f64).sqrt() as usize + 1;
         (0..limit)
@@ -181,11 +183,11 @@ pub fn eu125() -> String {
 
     let res = palindromic_sof_sqrs((10 as usize).pow(8)).iter().fold(0, |acc, x| acc + x);
     assert_eq!(res, 2906969179);
-    format!("eu125 = {}", res)
+    format!("p125 = {}", res)
 } // 2906969179
 
 /// Cuboid layers
-pub fn eu126() -> String {
+pub fn p126() -> String {
     fn f(x: u32, y: u32, z: u32, l: u32) -> u32 {
         2 * (x * y + x * z + y * z) + 4 * (l - 1) * (x + y + z + l - 2)
     }
@@ -218,30 +220,30 @@ pub fn eu126() -> String {
 
     let res = solve(1000);
     assert_eq!(res, 18522);
-    format!("eu126 = {}", res)
+    format!("p126 = {}", res)
 } // 18522
 
 /// abc-hits - unimplemented
-pub fn eu127() -> String {
-    "eu127 = unimplemented".to_string()
+pub fn p127() -> String {
+    "p127 = unimplemented".to_string()
 }
 
 /// Hexagonal tile differences - unimplemented
-pub fn eu128() -> String {
-    "eu128 = unimplemented".to_string()
+pub fn p128() -> String {
+    "p128 = unimplemented".to_string()
 }
 
 /// Repunit divisibility - unimplemented
-pub fn eu129() -> String {
-    "eu129 = unimplemented".to_string()
+pub fn p129() -> String {
+    "p129 = unimplemented".to_string()
 }
 
 /// Composites with prime repunit property - unimplemented
-pub fn eu130() -> String {
-    "eu130 = unimplemented".to_string()
+pub fn p130() -> String {
+    "p130 = unimplemented".to_string()
 }
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu121, eu122, eu123, eu124, eu125, eu126]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    (121, vec![p121, p122, p123, p124, p125, p126])
 }

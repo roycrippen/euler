@@ -1,21 +1,23 @@
 //! Project Euler solutions for problems 11 through 20.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::str::FromStr;
 use std::cmp;
 
 extern crate itertools;
-use self::itertools::Itertools;
+use itertools::Itertools;
 
 extern crate num;
-use self::num::{BigUint, pow};
-use self::num::bigint::ToBigUint;
+use num::{BigUint, pow};
+use num::bigint::ToBigUint;
 
 extern crate euler_library;
-use self::euler_library::big as eu_big;
+use euler_library::big as eu_big;
 
 
 /// Largest product in a grid
-pub fn eu011() -> String {
+pub fn p011() -> String {
     fn get_data() -> Vec<Vec<usize>> {
         let buffer = include_str!("../data/p011_grid.txt");
         buffer.lines()
@@ -56,12 +58,12 @@ pub fn eu011() -> String {
     }
 
     assert_eq!(max, 70600674);
-    format!("eu011 = {}", max)
+    format!("p011 = {}", max)
 } // 70600674
 
 
 /// Highly divisible triangular number
-pub fn eu012() -> String {
+pub fn p012() -> String {
     // Returns cnt of factors of n excluding 1 and n
     fn factor_cnt(mut n: usize) -> usize {
         if n < 2 {
@@ -100,11 +102,11 @@ pub fn eu012() -> String {
 
     let tri_number = solve();
     assert_eq!(tri_number, 76576500);
-    format!("eu012 = {}", tri_number)
+    format!("p012 = {}", tri_number)
 } // 76576500
 
 /// Large sum
-pub fn eu013() -> String {
+pub fn p013() -> String {
     let buffer = include_str!("../data/p013_sum.txt");
     let xs: Vec<&str> = buffer.split_whitespace().collect();
     let sum = xs.into_iter()
@@ -115,11 +117,11 @@ pub fn eu013() -> String {
 
     let str = &sum.to_string()[..10];
     assert_eq!(str, "5537376230");
-    format!("eu013 = {}", str)
+    format!("p013 = {}", str)
 } // 5537376230
 
 /// Longest Collatz sequence
-pub fn eu014() -> String {
+pub fn p014() -> String {
     const LIMIT: usize = 1_000_000;
     let mut cache: Vec<usize> = vec![0; LIMIT];
 
@@ -144,11 +146,11 @@ pub fn eu014() -> String {
     }
 
     assert_eq!(answer, 837799);
-    format!("eu014 = {}", answer)
+    format!("p014 = {}", answer)
 } // 837799
 
 /// Lattice paths
-pub fn eu015() -> String {
+pub fn p015() -> String {
     // C(n,r) = n! / ( r! (n - r)! )
     // 40! / (20! (40 - 20)!)
     let fact_n = eu_big::factorial(40);
@@ -156,22 +158,22 @@ pub fn eu015() -> String {
     let s = (&fact_n / (&fact_r * &fact_r)).to_string();
 
     assert_eq!(s, "137846528820".to_string());
-    format!("eu015 = {}", s)
+    format!("p015 = {}", s)
 } // 137846528820
 
 /// Power digit sum
-pub fn eu016() -> String {
+pub fn p016() -> String {
     let n = 1000;
     let two = 2.to_biguint().unwrap();
     let xs = pow(two, n).to_string();
     let res = xs.chars().fold(0, |acc, x| acc + (x as usize) - 48);
 
     assert_eq!(res, 1366);
-    format!("eu016 = {}", res)
+    format!("p016 = {}", res)
 } // 1366
 
 /// Maximum path sum I
-pub fn eu017() -> String {
+pub fn p017() -> String {
     macro_rules! hashmap {
         ($( $key: expr => $val: expr ),*) => {{
              let mut map = ::std::collections::HashMap::new();
@@ -198,11 +200,11 @@ pub fn eu017() -> String {
               "onethousand".len();
 
     assert_eq!(res, 21124);
-    format!("eu017 = {}", res)
+    format!("p017 = {}", res)
 } // 21124
 
 /// Maximum path sum I
-pub fn eu018() -> String {
+pub fn p018() -> String {
     fn get_data() -> Vec<Vec<usize>> {
         let buffer = include_str!("../data/p018_triangle.txt");
         buffer.lines()
@@ -222,11 +224,11 @@ pub fn eu018() -> String {
     }
 
     assert_eq!(xss[0][0], 1074);
-    format!("eu018 = {}", xss[0][0])
+    format!("p018 = {}", xss[0][0])
 } // 1074
 
 /// Counting Sundays
-pub fn eu019() -> String {
+pub fn p019() -> String {
     let mut sunday = 7;
     let mut cnt = 0;
     for i in 1900..2001 {
@@ -251,20 +253,21 @@ pub fn eu019() -> String {
     }
 
     assert_eq!(cnt, 171);
-    format!("eu019 = {}", cnt)
+    format!("p019 = {}", cnt)
 } // 171
 
 /// Factorial digit sum
-pub fn eu020() -> String {
+pub fn p020() -> String {
     let n = 100;
     let xs = eu_big::factorial(n).to_string();
     let res = xs.chars().fold(0, |acc, x| acc + (x as usize) - 48);
 
     assert_eq!(res, 648);
-    format!("eu020 = {}", res)
+    format!("p020 = {}", res)
 } // 648
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu011, eu012, eu013, eu014, eu015, eu016, eu017, eu018, eu019, eu020]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    (11,
+     vec![p011, p012, p013, p014, p015, p016, p017, p018, p019, p020])
 }

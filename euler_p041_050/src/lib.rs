@@ -1,19 +1,21 @@
 //! Project Euler solutions for problems 41 through 50.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::str::FromStr;
 use std::f64::EPSILON;
 
-extern crate permutohedron;
-use self::permutohedron::Heap;
-
 extern crate primal;
 
+extern crate permutohedron;
+use permutohedron::Heap;
+
 extern crate euler_library;
-use self::euler_library::common as eu;
-use self::euler_library::primes;
+use euler_library::common as eu;
+use euler_library::primes;
 
 /// Pandigital prime
-pub fn eu041() -> String {
+pub fn p041() -> String {
     const LIMIT: usize = 10_000_000;
     let sieve = primal::Sieve::new(LIMIT);
 
@@ -27,11 +29,11 @@ pub fn eu041() -> String {
     }
 
     assert_eq!(i, 7652413);
-    format!("eu041 = {}", i)
+    format!("p041 = {}", i)
 } // 7652413
 
 /// Coded triangle numbers
-pub fn eu042() -> String {
+pub fn p042() -> String {
     fn get_data() -> Vec<Vec<u8>> {
         let buffer = include_str!("../data/p042_words.txt")
                          .chars()
@@ -60,11 +62,11 @@ pub fn eu042() -> String {
     }
 
     assert_eq!(cnt, 162);
-    format!("eu042 = {}", cnt)
+    format!("p042 = {}", cnt)
 } // 162
 
 /// Sub-string divisibility
-pub fn eu043() -> String {
+pub fn p043() -> String {
 
     // 4 hefty helper functions.  very fast solution - .006 sec
     fn get_next_grp(xss: Vec<Vec<char>>) -> Vec<Vec<char>> {
@@ -183,11 +185,11 @@ pub fn eu043() -> String {
     let sum = list.iter().fold(0, |acc, x| acc + x);
 
     assert_eq!(sum, 16695334890);
-    format!("eu043 = {}", sum)
+    format!("p043 = {}", sum)
 } // 16695334890
 
 /// Pentagon numbers
-pub fn eu044() -> String {
+pub fn p044() -> String {
     fn is_pent(x: usize) -> bool {
         let n = (1.0 + (1.0 + 24.0 * x as f64).sqrt()) / 6.0;
         n - n.floor() < EPSILON
@@ -207,11 +209,11 @@ pub fn eu044() -> String {
 
     let res = solve();
     assert_eq!(res, 5482660);
-    format!("eu044 = {}", res)
+    format!("p044 = {}", res)
 } // 5482660
 
 /// Triangular, pentagonal, and hexagonal
-pub fn eu045() -> String {
+pub fn p045() -> String {
     // ignore triangles, all hexagonals are triangles
     fn solve() -> usize {
 
@@ -233,11 +235,11 @@ pub fn eu045() -> String {
 
     let pent = solve();
     assert_eq!(pent, 1533776805);
-    format!("eu045 = {}", pent)
+    format!("p045 = {}", pent)
 } // 1533776805
 
 /// Goldbach's other conjecture
-pub fn eu046() -> String {
+pub fn p046() -> String {
     let sieve = primal::Sieve::new(10_000);
     let mut i = 9;
     loop {
@@ -258,11 +260,11 @@ pub fn eu046() -> String {
     }
 
     assert_eq!(i, 5777);
-    format!("eu046 = {}", i)
+    format!("p046 = {}", i)
 } // 5777
 
 /// Distinct primes factors
-pub fn eu047() -> String {
+pub fn p047() -> String {
     fn four_distinct() -> usize {
         let pfcs = primes::prime_factor_cnt(200_000);
         let pfc = |n: usize| pfcs[n];
@@ -277,11 +279,11 @@ pub fn eu047() -> String {
 
     let res = four_distinct();
     assert_eq!(res, 134043);
-    format!("eu047 = {}", res)
+    format!("p047 = {}", res)
 } // 134043
 
 /// Self powers
-pub fn eu048() -> String {
+pub fn p048() -> String {
     let digs = 10_000_000_000;
     let mut res: usize = 0;
     for i in 1..1_000 {
@@ -293,11 +295,11 @@ pub fn eu048() -> String {
     }
 
     assert_eq!(res % digs, 9110846700);
-    format!("eu048 = {:?}", res % digs)
+    format!("p048 = {:?}", res % digs)
 } // 9110846700
 
 /// Prime permutations
-pub fn eu049() -> String {
+pub fn p049() -> String {
     fn find_delta(xs: Vec<i32>, pos: usize) -> Option<i32> {
         let mut delta;
         for i in pos..xs.len() - 1 {
@@ -354,11 +356,11 @@ pub fn eu049() -> String {
     }
 
     assert_eq!(res, "296962999629".to_string());
-    format!("eu049 = {}", res)
+    format!("p049 = {}", res)
 } // 296962999629
 
 /// Consecutive prime sum
-pub fn eu050() -> String {
+pub fn p050() -> String {
     const MAX: usize = 1_000_001;
 
     let sieve = primal::Sieve::new(MAX + 1);
@@ -403,10 +405,12 @@ pub fn eu050() -> String {
     }
 
     assert_eq!(max_prime, 997651);
-    format!("eu050 = {}", max_prime)
+    format!("p050 = {}", max_prime)
 } // 997651
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu041, eu042, eu043, eu044, eu045, eu046, eu047, eu048, eu049, eu050]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    // Euler solutions in this crate.
+    (41,
+     vec![p041, p042, p043, p044, p045, p046, p047, p048, p049, p050])
 }

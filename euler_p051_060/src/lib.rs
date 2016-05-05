@@ -1,17 +1,19 @@
 //! Project Euler solutions for problems 51 through 60.
-
-extern crate num;
-use self::num::{BigUint, pow};
-use self::num::bigint::ToBigUint;
+//!
+//! This crate is designed to be used via crate `euler`.
 
 extern crate primal;
 
+extern crate num;
+use num::{BigUint, pow};
+use num::bigint::ToBigUint;
+
 extern crate euler_library;
-use self::euler_library::common as eu;
-use self::euler_library::cards::{Card, Hand, char_to_suit, char_to_val};
+use euler_library::common as eu;
+use euler_library::cards::{Card, Hand, char_to_suit, char_to_val};
 
 /// Prime digit replacements
-pub fn eu051() -> String {
+pub fn p051() -> String {
     // assume solution set has:
     // 6 digits, 3 'same' digits that change,
     // ends in fixed number
@@ -81,11 +83,11 @@ pub fn eu051() -> String {
         }
     }
 
-    format!("eu051 = {}", res.unwrap())
+    format!("p051 = {}", res.unwrap())
 } // 121313
 
 /// Permuted multiples
-pub fn eu052() -> String {
+pub fn p052() -> String {
 
     fn same_digits(a: usize, b: usize) -> bool {
         let mut xs = eu::to_bytes(a);
@@ -129,11 +131,11 @@ pub fn eu052() -> String {
         max *= 10;
     }
 
-    format!("eu052 = {}", res.unwrap())
+    format!("p052 = {}", res.unwrap())
 } // 142857
 
 /// Combinatoric selections
-pub fn eu053() -> String {
+pub fn p053() -> String {
     // combinations n C r
     fn ncr_recur(n: usize, r: usize) -> usize {
         if r == 0 { 1 } else { ncr_recur(n - 1, r - 1) * n / r }
@@ -149,12 +151,12 @@ pub fn eu053() -> String {
             if ncr_recur(n, r) <= 1_000_000 { cnt -= 1 } else { break };
         }
     }
-    format!("eu053 = {}", cnt)
+    format!("p053 = {}", cnt)
 } // 4075
 
 
 /// Poker hands
-pub fn eu054() -> String {
+pub fn p054() -> String {
     fn get_data() -> Vec<char> {
         let buffer = include_str!("../data/p054_hands.txt");
         buffer.chars().filter(|&x| x != ' ' && x != '\n').collect::<Vec<char>>()
@@ -198,11 +200,11 @@ pub fn eu054() -> String {
         }
     }
     assert_eq!(cnt, 376);
-    format!("eu054 = {}", cnt)
+    format!("p054 = {}", cnt)
 } // 376
 
 /// Lychrel numbers
-pub fn eu055() -> String {
+pub fn p055() -> String {
     fn is_lychrel(n: usize) -> bool {
         let mut x: BigUint = n.to_biguint().unwrap().clone();
         for _ in 1..50 {
@@ -218,11 +220,11 @@ pub fn eu055() -> String {
     }
 
     let cnt = (1..10_000).fold(0, |acc, x| if is_lychrel(x) { acc + 1 } else { acc });
-    format!("eu055 = {}", cnt)
+    format!("p055 = {}", cnt)
 } // 249
 
 /// Powerful digit sum
-pub fn eu056() -> String {
+pub fn p056() -> String {
     let mut max = 0;
     for i in (90..100).rev() {
         for b in (90..100).rev() {
@@ -235,11 +237,11 @@ pub fn eu056() -> String {
         }
 
     }
-    format!("eu056 = {}", max)
+    format!("p056 = {}", max)
 } // 972
 
 /// Square root convergents
-pub fn eu057() -> String {
+pub fn p057() -> String {
     let mut cnt = 0;
     let mut n = 1.to_biguint().unwrap();
     let mut d = 2.to_biguint().unwrap();;
@@ -253,11 +255,11 @@ pub fn eu057() -> String {
     }
 
 
-    format!("eu057 = {}", cnt)
+    format!("p057 = {}", cnt)
 } // 153
 
 /// Spiral primes
-pub fn eu058() -> String {
+pub fn p058() -> String {
     let get_result = || -> usize {
         let mut prime_cnt = 0;
         let mut factor = 2;
@@ -280,11 +282,11 @@ pub fn eu058() -> String {
 
     let res = get_result();
     assert_eq!(res, 26241);
-    format!("eu058 = {}", res)
+    format!("p058 = {}", res)
 } // 26241
 
 /// XOR decryption
-pub fn eu059() -> String {
+pub fn p059() -> String {
     fn decode(msg: &[u8], key: &[u8]) -> Vec<u8> {
         msg.iter()
            .zip(key.iter()
@@ -317,11 +319,11 @@ pub fn eu059() -> String {
         }
     }
     assert_eq!(res, 107359);
-    format!("eu059 = {}", res)
+    format!("p059 = {}", res)
 } // 107359
 
 /// Prime pair sets
-pub fn eu060() -> String {
+pub fn p060() -> String {
     fn eval(w: &[usize], k: usize, s: usize, sieve: &primal::Sieve) -> usize {
         let ok = |a, b| {
             let mut ten = 1;
@@ -356,10 +358,12 @@ pub fn eu060() -> String {
                            .collect::<Vec<_>>();
 
     let sum = eval(&some_primes, 5, 0, &sieve);
-    format!("eu060 = {}", sum)
+    format!("p060 = {}", sum)
 } // 26033
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu051, eu052, eu053, eu054, eu055, eu056, eu057, eu058, eu059, eu060]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    // Euler solutions in this crate.
+    (51,
+     vec![p051, p052, p053, p054, p055, p056, p057, p058, p059, p060])
 }

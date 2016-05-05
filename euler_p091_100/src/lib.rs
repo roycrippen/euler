@@ -1,4 +1,6 @@
 //! Project Euler solutions for problems 91 through 100.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::collections::HashSet;
 use std::collections::HashMap;
@@ -6,17 +8,17 @@ use std::fmt;
 use std::cmp;
 use std::f64::EPSILON;
 
-extern crate num;
-use self::num::integer::gcd;
-
 extern crate itertools;
-use self::itertools::Itertools;
+use itertools::Itertools;
+
+extern crate num;
+use num::integer::gcd;
 
 extern crate euler_library;
-use self::euler_library::common as eu;
+use euler_library::common as eu;
 
 /// Right triangles with integer coordinates
-pub fn eu091() -> String {
+pub fn p091() -> String {
     const SIZE: i32 = 50;
 
     let cnt = SIZE * SIZE * 3 +
@@ -34,11 +36,11 @@ pub fn eu091() -> String {
                   .fold(0, |acc, x| acc + x);
 
     assert_eq!(cnt, 14234);
-    format!("eu091 = {}", cnt)
+    format!("p091 = {}", cnt)
 } // 14234
 
 /// Square digit chains
-pub fn eu092() -> String {
+pub fn p092() -> String {
 
     const MAX: usize = 10_000_000;
     // sum_sq(9_999_999) = 567, all others are less
@@ -66,11 +68,11 @@ pub fn eu092() -> String {
                             |acc, x| if table[sum_sq(x)] == 89 { acc + 1 } else { acc });
 
     assert_eq!(cnt, 8581146);
-    format!("eu092 = {}", cnt)
+    format!("p092 = {}", cnt)
 } // 8581146
 
 /// Arithmetic expressions
-pub fn eu093() -> String {
+pub fn p093() -> String {
     fn eval(a: f64, b: f64, op: char) -> f64 {
         match op {
             '+' => a + b,
@@ -165,11 +167,11 @@ pub fn eu093() -> String {
     let s = format!("{}{}{}{}", max.1[0], max.1[1], max.1[2], max.1[3]);
 
     assert_eq!(s, "1258".to_string());
-    format!("eu093 = {}", s)
+    format!("p093 = {}", s)
 } // 1258
 
 /// Almost equilateral triangles
-pub fn eu094() -> String {
+pub fn p094() -> String {
     // v_short_side and v_long_side from:
     // http://www.had2know.com/academics/nearly-equilateral-heronian-triangles.html
     //
@@ -206,11 +208,11 @@ pub fn eu094() -> String {
     }
 
     assert_eq!(p, 518408346);
-    format!("eu094 = {}", p)
+    format!("p094 = {}", p)
 } // 518408346
 
 /// Amicable chains
-pub fn eu095() -> String {
+pub fn p095() -> String {
     // returns Some(length of amicable chain, min value in chain) or None
     fn is_amicable_chain(n: usize, divs: &mut Vec<usize>) -> Option<(usize, usize)> {
         let (mut next, mut cnt, mut min) = (n, 0, n);
@@ -261,11 +263,11 @@ pub fn eu095() -> String {
                          .unwrap();
 
     assert_eq!(min, 14316);
-    format!("eu095 = {}", min)
+    format!("p095 = {}", min)
 } // 14316
 
 /// Su Doku
-pub fn eu096() -> String {
+pub fn p096() -> String {
 
     #[derive(PartialEq, PartialOrd, Copy, Clone, Debug)]
     struct Cell {
@@ -534,19 +536,19 @@ pub fn eu096() -> String {
     }
 
     assert_eq!(cnt, 24702);
-    format!("eu096 = {}", cnt)
+    format!("p096 = {}", cnt)
 } // 24702
 
 
 /// Large non-Mersenne prime
-pub fn eu097() -> String {
+pub fn p097() -> String {
     let res: usize = (0..7830457).fold(28433, |acc, _| (2 * acc) % 10_000_000_000) + 1;
     assert_eq!(res, 8739992577);
-    format!("eu097 = {}", res)
+    format!("p097 = {}", res)
 } // 8739992577
 
 /// Anagramic squares
-pub fn eu098() -> String {
+pub fn p098() -> String {
     // get the words from the file
     fn get_words() -> Vec<String> {
         include_str!("../data/p098_words.txt")
@@ -654,11 +656,11 @@ pub fn eu098() -> String {
     }
 
     assert_eq!(res, 18769);
-    format!("eu098 = {}", res)
+    format!("p098 = {}", res)
 } // 18769
 
 /// Largest exponential
-pub fn eu099() -> String {
+pub fn p099() -> String {
     // logb(x^y) = y ∙ logb(x)
     let buffer = include_str!("../data/p099_base_exp.txt");
     let xs = buffer.lines()
@@ -673,11 +675,11 @@ pub fn eu099() -> String {
 
     let res = xs.last().unwrap().1 + 1;
     assert_eq!(res, 709);
-    format!("eu099 = {}", res)
+    format!("p099 = {}", res)
 } // 709
 
 /// Arranged probability
-pub fn eu100() -> String {
+pub fn p100() -> String {
     // https://www.alpertron.com.ar/QUAD.HTM
     // (b/n)*((b-1)/(n-1)) = 2b^2 - 2b - n^2 + n = 0
     // [a,b,c,d,e,f]=[2,0,-1,-2,1,0]
@@ -696,7 +698,8 @@ pub fn eu100() -> String {
     format!("eu100 = {}", b)
 } // 756872327473
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu091, eu092, eu093, eu094, eu095, eu096, eu097, eu098, eu099, eu100]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    (91,
+     vec![p091, p092, p093, p094, p095, p096, p097, p098, p099, p100])
 }

@@ -1,20 +1,22 @@
 //! Project Euler solutions for problems 101 through 110.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::mem;
 
 extern crate itertools;
-use self::itertools::Itertools;
+use itertools::Itertools;
 
 extern crate petgraph;
-use self::petgraph::Graph;
-use self::petgraph::algo::min_spanning_tree;
+use petgraph::Graph;
+use petgraph::algo::min_spanning_tree;
 
 extern crate euler_library;
-use self::euler_library::common as eu;
-use self::euler_library::primes;
+use euler_library::common as eu;
+use euler_library::primes;
 
 /// Optimum polynomial
-pub fn eu101() -> String {
+pub fn p101() -> String {
     fn un(n: usize) -> f64 {
         let nf = n as f64;
         1.0 - nf + nf.powf(2.0) - nf.powf(3.0) + nf.powf(4.0) - nf.powf(5.0) + nf.powf(6.0) - nf.powf(7.0) +
@@ -122,11 +124,11 @@ pub fn eu101() -> String {
     }
 
     assert_eq!(result as usize, 37076114526);
-    format!("eu101 = {}", result)
+    format!("p101 = {}", result)
 } // 37076114526
 
 /// Triangle containment
-pub fn eu102() -> String {
+pub fn p102() -> String {
     #[derive(Debug, Clone, Copy)]
     struct P {
         x: i32,
@@ -190,11 +192,11 @@ pub fn eu102() -> String {
                         |acc, xs| if is_contained(xs[0], xs[1], xs[2]) { acc + 1 } else { acc });
 
     assert_eq!(res, 228);
-    format!("eu102 = {}", res)
+    format!("p102 = {}", res)
 } // 228
 
 /// Special subset sums: optimum
-pub fn eu103() -> String {
+pub fn p103() -> String {
 
     fn set_string(set: &[usize]) -> String {
         set.iter().fold("".to_string(), |acc, x| acc + &x.to_string())
@@ -286,11 +288,11 @@ pub fn eu103() -> String {
 
     let res = solve(&[20, 31, 38, 39, 40, 42, 45]);
     assert_eq!(res, "20313839404245".to_string());
-    format!("eu103 = {}", res)
+    format!("p103 = {}", res)
 } // 20313839404245
 
 /// Pandigital Fibonacci ends
-pub fn eu104() -> String {
+pub fn p104() -> String {
 
     let big = (10 as usize).pow(9);
     let root5 = (5.0 as f64).sqrt();
@@ -320,11 +322,11 @@ pub fn eu104() -> String {
     }
 
     assert_eq!(cnt, 329468);
-    format!("eu104 = {}", cnt)
+    format!("p104 = {}", cnt)
 } // 329468
 
 /// Special subset sums: testing
-pub fn eu105() -> String {
+pub fn p105() -> String {
     fn get_data() -> Vec<Vec<usize>> {
         let buffer = include_str!("../data/p105_sets.txt");
         buffer.lines()
@@ -387,11 +389,11 @@ pub fn eu105() -> String {
                   .fold(0, |acc, x| if is_sss(&x) { acc + vec_sum(&x) } else { acc });
 
     assert_eq!(sum, 73702);
-    format!("eu105 = {}", sum)
+    format!("p105 = {}", sum)
 } // 73702
 
 /// Special subset sums: meta-testing
-pub fn eu106() -> String {
+pub fn p106() -> String {
     fn has_duplicates(xs: &[&usize], ys: &[&usize]) -> bool {
         let cnt = xs.iter()
                     .take_while(|x| !ys.contains(x))
@@ -428,11 +430,11 @@ pub fn eu106() -> String {
     }
 
     assert_eq!(res, 21384);
-    format!("eu106 = {}", res)
+    format!("p106 = {}", res)
 } // 21384
 
 /// Minimal network
-pub fn eu107() -> String {
+pub fn p107() -> String {
     fn get_data() -> Vec<Vec<u32>> {
         let buffer = include_str!("../data/p107_network.txt");
         buffer.lines()
@@ -464,11 +466,11 @@ pub fn eu107() -> String {
 
     let res = gr_sum - gr_res_sum;
     assert_eq!(res, 259679);
-    format!("eu107 = {}", res)
+    format!("p107 = {}", res)
 } // 259679
 
 /// Diophantine reciprocals I
-pub fn eu108() -> String {
+pub fn p108() -> String {
     fn dio_recip_cnt(n: usize) -> usize {
         (primes::prime_factors(n)
              .into_iter()
@@ -494,11 +496,11 @@ pub fn eu108() -> String {
 
     let res = solve();
     assert_eq!(res, 180180);
-    format!("eu108 = {}", res)
+    format!("p108 = {}", res)
 } // 180180
 
 /// Darts
-pub fn eu109() -> String {
+pub fn p109() -> String {
     fn get_scores() -> (Vec<usize>, Vec<usize>) {
         let mut scores = vec![0, 25, 50];
         let mut doubles = vec![50];
@@ -530,11 +532,11 @@ pub fn eu109() -> String {
 
     let res = solve(100);
     assert_eq!(res, 38182);
-    format!("eu109 = {}", res)
+    format!("p109 = {}", res)
 } // 38182
 
 /// Diophantine reciprocals II
-pub fn eu110() -> String {
+pub fn p110() -> String {
     fn distinct_solution(xs: &[usize]) -> usize {
         (xs.into_iter().fold(1, |acc, x| acc * (2 * x + 1)) + 1) / 2
     }
@@ -582,10 +584,11 @@ pub fn eu110() -> String {
 
     let res = solve();
     assert_eq!(res, 9350130049860600);
-    format!("eu110 = {}", res)
+    format!("p110 = {}", res)
 } // 9350130049860600
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu101, eu102, eu103, eu104, eu105, eu106, eu107, eu108, eu109, eu110]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    (101,
+     vec![p101, p102, p103, p104, p105, p106, p107, p108, p109, p110])
 }

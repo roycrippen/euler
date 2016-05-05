@@ -1,24 +1,27 @@
 //! Project Euler solutions for problems 21 through 30.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::str::FromStr;
 use std::mem;
 use std::collections::HashSet;
 
-extern crate euler_library;
-use self::euler_library::common as eu;
-use self::euler_library::big as eu_big;
-
 extern crate primal;
 
-extern crate num;
-use self::num::{BigUint, One, Zero};
-use self::num::bigint::ToBigUint;
-
 extern crate itertools;
-use self::itertools::Itertools;
+use itertools::Itertools;
+
+extern crate num;
+use num::{BigUint, One, Zero};
+use num::bigint::ToBigUint;
+
+extern crate euler_library;
+use euler_library::common as eu;
+use euler_library::big as eu_big;
+
 
 /// Amicable numbers
-pub fn eu021() -> String {
+pub fn p021() -> String {
     const N: usize = 10_000;
 
     let amic = eu::divisor_sum_list(N);
@@ -30,11 +33,11 @@ pub fn eu021() -> String {
     }
 
     assert_eq!(sum / 2, 31626);
-    format!("eu021 = {}", sum / 2)
+    format!("p021 = {}", sum / 2)
 } // 31626
 
 /// Names scores
-pub fn eu022() -> String {
+pub fn p022() -> String {
     let buffer = include_str!("../data/p022_names.txt")
                      .chars()
                      .filter(|&x| x != '\"' && x != '\n')
@@ -55,11 +58,11 @@ pub fn eu022() -> String {
                    });
 
     assert!(sum == 871198282);
-    format!("eu022 = {}", sum)
+    format!("p022 = {}", sum)
 } // 871198282
 
 /// Non-abundant sums
-pub fn eu023() -> String {
+pub fn p023() -> String {
     const N: usize = 28124;
     let factor_sums = eu::divisor_sum_list(N - 1);
     let mut abundants = [false; N];
@@ -83,11 +86,11 @@ pub fn eu023() -> String {
     }
 
     assert_eq!(sum, 4179871);
-    format!("eu023 = {}", sum)
+    format!("p023 = {}", sum)
 } // 4179871
 
 /// Lexicographic permutations
-pub fn eu024() -> String {
+pub fn p024() -> String {
     let mut res: Vec<usize> = Vec::new();
     let mut n = 1_000_000;
     let mut a = vec![0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -114,11 +117,11 @@ pub fn eu024() -> String {
     }
 
     assert_eq!(tt, "2783915460".to_string());
-    format!("eu024 = {}", tt)
+    format!("p024 = {}", tt)
 } // 2783915460
 
 /// 1000-digit Fibonacci number
-pub fn eu025() -> String {
+pub fn p025() -> String {
     let bu10 = 10.to_biguint().unwrap();
     let mut limit: BigUint = One::one();
     for _ in 0..999 {
@@ -134,11 +137,11 @@ pub fn eu025() -> String {
     }
 
     assert_eq!(cnt, 4782);
-    format!("eu025 = {}", cnt)
+    format!("p025 = {}", cnt)
 } // 4782
 
 /// Reciprocal cycles
-pub fn eu026() -> String {
+pub fn p026() -> String {
     fn repeat_cnt(n: usize) -> usize {
         let mut cnt = 2;
         if n % 5 != 0 {
@@ -162,11 +165,11 @@ pub fn eu026() -> String {
     }
 
     assert_eq!(idx, 983);
-    format!("eu026 = {}", idx)
+    format!("p026 = {}", idx)
 } // 983
 
 /// Quadratic primes
-pub fn eu027() -> String {
+pub fn p027() -> String {
     fn eval_quad(a: i32, b: i32, sieve: &primal::Sieve) -> i32 {
         let mut cnt = 0;
         for i in 0.. {
@@ -197,18 +200,18 @@ pub fn eu027() -> String {
 
     let res = ab.0 * ab.1;
     assert_eq!(res, -59231);
-    format!("eu027 = {}", res)
+    format!("p027 = {}", res)
 } // -59231
 
 /// Number spiral diagonals
-pub fn eu028() -> String {
+pub fn p028() -> String {
     let sum = (3..1002).step(2).fold(1, |acc, i| acc + 4 * i * i - 6 * (i - 1));
     assert_eq!(sum, 669171001);
-    format!("eu028 = {}", sum)
+    format!("p028 = {}", sum)
 } // 669171001
 
 /// Distinct powers
-pub fn eu029() -> String {
+pub fn p029() -> String {
     let mut map = HashSet::new();
     for a in 2..101 {
         for b in 2..101 {
@@ -217,11 +220,11 @@ pub fn eu029() -> String {
     }
 
     assert_eq!(map.len(), 9240);
-    format!("eu029 = {}", map.len())
+    format!("p029 = {}", map.len())
 } // 9240
 
 /// Digit fifth powers
-pub fn eu030() -> String {
+pub fn p030() -> String {
     const B: u32 = 5;
 
     let sum_pow5 = |mut n: u32| -> u32 {
@@ -236,10 +239,12 @@ pub fn eu030() -> String {
     let max = (9 as u32).pow(B) * (B - 1);
     let res = (2..max).fold(0, |acc, x| if sum_pow5(x) == x { acc + x } else { acc });
     assert_eq!(res, 443839);
-    format!("eu030 = {}", res)
+    format!("p030 = {}", res)
 } // 443839
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu021, eu022, eu023, eu024, eu025, eu026, eu027, eu028, eu029, eu030]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    // Euler solutions in this crate.
+    (21,
+     vec![p021, p022, p023, p024, p025, p026, p027, p028, p029, p030])
 }

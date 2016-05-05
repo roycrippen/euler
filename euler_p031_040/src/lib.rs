@@ -1,4 +1,6 @@
 //! Project Euler solutions for problems 31 through 40.
+//!
+//! This crate is designed to be used via crate `euler`.
 
 use std::collections::HashSet;
 use std::f32::EPSILON;
@@ -6,13 +8,13 @@ use std::f32::EPSILON;
 extern crate primal;
 
 extern crate num;
-use self::num::integer::gcd;
+use num::integer::gcd;
 
 extern crate euler_library;
-use self::euler_library::common as eu;
+use euler_library::common as eu;
 
 /// Coin sums
-pub fn eu031() -> String {
+pub fn p031() -> String {
     let mut ws = vec![0; 201];
     ws[0] = 1;
     let pences = vec![1, 2, 5, 10, 20, 50, 100, 200];
@@ -25,11 +27,11 @@ pub fn eu031() -> String {
 
     let res = *ws.last().unwrap();
     assert_eq!(res, 73682);
-    format!("eu031 = {}", res)
+    format!("p031 = {}", res)
 } // 73682
 
 /// Pandigital products
-pub fn eu032() -> String {
+pub fn p032() -> String {
     let mut m: HashSet<usize> = HashSet::new();
     // 1-digit * 4-digits in map to avoid dups
     for i in 2..10 {
@@ -59,11 +61,11 @@ pub fn eu032() -> String {
 
     let sum = m.iter().fold(0, |acc, x| acc + x);
     assert_eq!(sum, 45228);
-    format!("eu032 = {}", sum)
+    format!("p032 = {}", sum)
 } // 45228
 
 /// Digit cancelling fractions
-pub fn eu033() -> String {
+pub fn p033() -> String {
     fn is_digit_canceling_fraction(n: u32, d: u32) -> bool {
         let ns = format!("{}", n).into_bytes();
         let ds = format!("{}", d).into_bytes();
@@ -89,11 +91,11 @@ pub fn eu033() -> String {
 
     let answer = prod_den / gcd(prod_num, prod_den);
     assert_eq!(answer, 100);
-    format!("eu033 = {}", answer)
+    format!("p033 = {}", answer)
 } // 100
 
 /// Digit factorials
-pub fn eu034() -> String {
+pub fn p034() -> String {
     let fact = [1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880];
 
     let is_digit_fact = |n: usize| -> bool {
@@ -108,11 +110,11 @@ pub fn eu034() -> String {
     // max value 5*9! = 1814400 < 10^7
     let sum = (10..1814401).fold(0, |acc, x| if is_digit_fact(x) { acc + x } else { acc });
     assert_eq!(sum, 40730);
-    format!("eu034 = {}", sum)
+    format!("p034 = {}", sum)
 } // 40730
 
 /// Circular primes
-pub fn eu035() -> String {
+pub fn p035() -> String {
     fn rotate(mut vec: Vec<u8>) -> Vec<u8> {
         let first = vec.remove(0);
         vec.push(first);
@@ -155,11 +157,11 @@ pub fn eu035() -> String {
     }
 
     assert_eq!(sum + 1, 55);
-    format!("eu035 = {}", sum + 1)
+    format!("p035 = {}", sum + 1)
 } // 55
 
 /// Double-base palindromes
-pub fn eu036() -> String {
+pub fn p036() -> String {
     fn is_palindrome_base10(n: usize) -> bool {
         let mut rev = 0;
         let mut num = n;
@@ -183,11 +185,11 @@ pub fn eu036() -> String {
     let a = (1..1000000).fold(0,
                               |acc, x| if is_palindrome_base10(x) { acc + is_palindrome_binary(x) } else { acc });
     assert_eq!(a, 872187);
-    format!("eu036 = {}", a)
+    format!("p036 = {}", a)
 } // 872187
 
 /// Truncatable primes
-pub fn eu037() -> String {
+pub fn p037() -> String {
     fn trunc_left(n: usize) -> usize {
         let mut xs = eu::to_bytes(n);
         if xs.len() < 2 {
@@ -243,11 +245,11 @@ pub fn eu037() -> String {
 
     let sum = trunc_primes.iter().fold(0, |acc, x| acc + x);
     assert_eq!(sum, 748317);
-    format!("eu037 = {}", sum)
+    format!("p037 = {}", sum)
 } // 748317
 
 /// Pandigital multiples
-pub fn eu038() -> String {
+pub fn p038() -> String {
     // 9 * (1,2,3,4,5)
     let mut max = String::from("918273645");
 
@@ -270,11 +272,11 @@ pub fn eu038() -> String {
     }
 
     assert_eq!(max, "932718654".to_string());
-    format!("eu038 = {}", max)
+    format!("p038 = {}", max)
 } // 932718654
 
 /// Integer right triangles
-pub fn eu039() -> String {
+pub fn p039() -> String {
     let mut ps = vec![0; 1001];
 
     for a in 3..999 {
@@ -302,11 +304,11 @@ pub fn eu039() -> String {
     }
 
     assert_eq!(res, 840);
-    format!("eu039 = {}", res)
+    format!("p039 = {}", res)
 } // 840
 
 /// Champernowne's constant
-pub fn eu040() -> String {
+pub fn p040() -> String {
     let (mut prod, mut cnt, mut next) = (1, 1, 1);
     for i in 1.. {
         let ds = eu::to_bytes(i);
@@ -321,10 +323,12 @@ pub fn eu040() -> String {
     }
 
     assert_eq!(prod, 210);
-    format!("eu040 = {}", prod)
+    format!("p040 = {}", prod)
 } // 210
 
-/// Returns Vec of the Euler solution functions in this crate.
-pub fn get_functions() -> Vec<fn() -> String> {
-    vec![eu031, eu032, eu033, eu034, eu035, eu036, eu037, eu038, eu039, eu040]
+/// Returns (start, Vec of solution functions) for all solutions in this crate.
+pub fn get_functions() -> (u32, Vec<fn() -> String>) {
+    // Euler solutions in this crate.
+    (31,
+     vec![p031, p032, p033, p034, p035, p036, p037, p038, p039, p040])
 }
