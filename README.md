@@ -2,9 +2,9 @@
 
 Solutions to selected [Project Euler](https://projecteuler.net/) problems written in [Rust](https://www.rust-lang.org/).
 
-Please read the [API documentation here](http://roycrippen.github.io/euler_solutions/euler_solutions/index.html)
+Please read the [API documentation here](http://roycrippen.github.io/euler/euler/index.html)
 
-[![Build Status](https://travis-ci.org/roycrippen/euler_solutions.svg?branch=master)](https://travis-ci.org/roycrippen/euler_solutions)
+[![Build Status](https://travis-ci.org/roycrippen/euler.svg?branch=master)](https://travis-ci.org/roycrippen/euler)
 
 ## Using this crate
 
