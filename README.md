@@ -1,5 +1,4 @@
-# Euler Solutions
-
+# euler
 Solutions to selected [Project Euler](https://projecteuler.net/) problems written in [Rust](https://www.rust-lang.org/).
 
 Please read the [API documentation here](http://roycrippen.github.io/euler/euler/index.html)
@@ -19,7 +18,7 @@ And add this to your root crate.
 extern crate euler;
 ```
 
-# Example
+## Example
 
 ```rust
 extern crate euler;
