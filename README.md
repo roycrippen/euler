@@ -22,12 +22,35 @@ extern crate euler;
 
 ```rust
 extern crate euler;
+use euler::euler_p011_020 as p11_to_20;
 
-// Runs all solutions concurrently.
-euler::run_all();
+fn main() {
+    // test solution 16
+    assert_eq!(p11_to_20::p016(), "p016 = 1366");
 
-// test solution 16
-! assert_eq!(euler::euler_p011_020::p016(), "p016 = 1366");
+    // run all solutions concurrently
+    euler::run_all();
+}
+```
+
+### Build
+
+```rust
+cargo build --release
+```
+
+### Run
+
+run solution to problem 88
+
+```rust
+cargo run --release 88
+```
+
+run all solutions concurrently
+
+```rust
+cargo run --release
 ```
 
 Result list will roughly be ordered by execution time, slowest last.

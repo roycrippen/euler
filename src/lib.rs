@@ -18,16 +18,39 @@
 //! extern crate euler;
 //! ```
 //!
-//! # Example
+//! ## Example
 //!
 //! ```
 //! extern crate euler;
+//! use euler::euler_p011_020 as p11_to_20;
 //!
-//! // Runs all solutions concurrently.
-//! euler::run_all();
+//! fn main() {
+//!     // test solution 16
+//!     assert_eq!(p11_to_20::p016(), "p016 = 1366");
 //!
-//! // test solution 16
-//! assert_eq!(euler::euler_p011_020::p016(), "p016 = 1366");
+//!     // run all solutions concurrently
+//!     euler::run_all();
+//! }
+//! ```
+//!
+//! ## Build
+//!
+//! ```ignore
+//! cargo build --release
+//! ```
+//!
+//! ## Run
+//!
+//! run solution to problem 88
+//!
+//! ```ignore
+//! cargo run --release 88
+//! ```
+//!
+//! run all solutions concurrently
+//!
+//! ```ignore
+//! cargo run --release
 //! ```
 use std::collections::HashMap;
 use std::thread;
