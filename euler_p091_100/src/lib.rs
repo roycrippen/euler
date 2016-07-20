@@ -49,7 +49,8 @@ pub fn p092() -> String {
     let sum_sq = |mut n: usize| -> usize {
         let mut total = 0;
         while n != 0 {
-            total += (n % 10).pow(2);
+            // total += (n % 10).pow(2); slow
+            total += (n % 10) * (n % 10);
             n /= 10
         }
         total
