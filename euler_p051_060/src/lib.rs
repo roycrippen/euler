@@ -46,9 +46,9 @@ pub fn p051() -> String {
 
     let sieve = primal::Sieve::new(1_000_000);
     let combs = eu::perms_with_reps(3, &[0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-                    .into_iter()
-                    .filter(|ref x| x[0] != 0 && x[2] % 2 != 0 && x[2] % 5 != 0)
-                    .collect::<Vec<_>>();
+        .into_iter()
+        .filter(|x| x[0] != 0 && x[2] % 2 != 0 && x[2] % 5 != 0)
+        .collect::<Vec<_>>();
 
     let find_answer = |mask: &[usize; 6]| -> Option<usize> {
         let ys = combs.clone();
@@ -289,22 +289,22 @@ pub fn p058() -> String {
 pub fn p059() -> String {
     fn decode(msg: &[u8], key: &[u8]) -> Vec<u8> {
         msg.iter()
-           .zip(key.iter()
-                   .cycle()
-                   .take(msg.len()))
-           .map(|(&a, b)| a ^ b)
-           .collect::<Vec<u8>>()
+            .zip(key.iter()
+                .cycle()
+                .take(msg.len()))
+            .map(|(&a, b)| a ^ b)
+            .collect::<Vec<u8>>()
     }
 
     fn get_msg() -> Vec<u8> {
         let buffer = include_str!("../data/p059_cipher.txt")
-                         .chars()
-                         .filter(|&x| x != '\"' && x != '\n')
-                         .collect::<String>();
+            .chars()
+            .filter(|&x| x != '\"' && x != '\n')
+            .collect::<String>();
 
         buffer.split(',')
-              .map(|x| x.parse::<u8>().unwrap())
-              .collect()
+            .map(|x| x.parse::<u8>().unwrap())
+            .collect()
     }
 
     let comb = eu::perms_without_reps_recur(3, &"abcdefghijklmnopqrstuvwxyz".to_string().into_bytes());
@@ -340,10 +340,10 @@ pub fn p060() -> String {
         let mut sum = 0;
         for (i, &wi) in w.iter().enumerate() {
             let w2 = w[i + 1..]
-                         .iter()
-                         .cloned()
-                         .filter(|&wj| ok(wi, wj) && ok(wj, wi))
-                         .collect::<Vec<_>>();
+                .iter()
+                .cloned()
+                .filter(|&wj| ok(wi, wj) && ok(wj, wi))
+                .collect::<Vec<_>>();
             sum = eval(&w2, k - 1, s + wi, sieve);
             if sum != 0 {
                 break;
@@ -354,8 +354,8 @@ pub fn p060() -> String {
 
     let sieve = primal::Sieve::new(100_000_005);
     let some_primes = sieve.primes_from(0)
-                           .take_while(|&p| p < 10_000)
-                           .collect::<Vec<_>>();
+        .take_while(|&p| p < 10_000)
+        .collect::<Vec<_>>();
 
     let sum = eval(&some_primes, 5, 0, &sieve);
     format!("p060 = {}", sum)
@@ -364,6 +364,5 @@ pub fn p060() -> String {
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
     // Euler solutions in this crate.
-    (51,
-     vec![p051, p052, p053, p054, p055, p056, p057, p058, p059, p060])
+    (51, vec![p051, p052, p053, p054, p055, p056, p057, p058, p059, p060])
 }

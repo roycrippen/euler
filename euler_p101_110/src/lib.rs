@@ -139,15 +139,15 @@ pub fn p102() -> String {
     fn get_points() -> Vec<Vec<P>> {
         let buffer = include_str!("../data/p102_triangles.txt");
         let xs = buffer.lines()
-                       .map(|x| {
-                           x.split(',')
-                            .map(|x| x.parse().unwrap())
-                            .collect::<Vec<i32>>()
-                       })
-                       .collect_vec();
+            .map(|x| {
+                x.split(',')
+                    .map(|x| x.parse().unwrap())
+                    .collect::<Vec<i32>>()
+            })
+            .collect_vec();
         xs.into_iter()
-          .map(|z| vec![P { x: z[0], y: z[1] }, P { x: z[2], y: z[3] }, P { x: z[4], y: z[5] }])
-          .collect_vec()
+            .map(|z| vec![P { x: z[0], y: z[1] }, P { x: z[2], y: z[3] }, P { x: z[4], y: z[5] }])
+            .collect_vec()
     }
 
 
@@ -187,9 +187,9 @@ pub fn p102() -> String {
     assert!(!is_contained(a, b, c));
 
     let res = get_points()
-                  .into_iter()
-                  .fold(0,
-                        |acc, xs| if is_contained(xs[0], xs[1], xs[2]) { acc + 1 } else { acc });
+        .into_iter()
+        .fold(0,
+              |acc, xs| if is_contained(xs[0], xs[1], xs[2]) { acc + 1 } else { acc });
 
     assert_eq!(res, 228);
     format!("p102 = {}", res)
@@ -218,7 +218,7 @@ pub fn p103() -> String {
         if xs.len() < 3 {
             return true;
         }
-        let t = eu::accumulate(&xs);
+        let t = eu::accumulate(xs);
         let lhs = t.iter().skip(1).take(xs.len() / 2).collect_vec();
 
         let t = eu::accumulate(&xs.iter().rev().cloned().collect_vec());
@@ -230,10 +230,10 @@ pub fn p103() -> String {
     fn pass_rule_1(xs: &[usize]) -> bool {
         for i in 3..(xs.len() / 2) + 1 {
             let sums = xs.iter()
-                         .combinations_n(i)
-                         .into_iter()
-                         .map(|x| x.iter().fold(0, |acc, &&y| acc + y))
-                         .sorted();
+                .combinations_n(i)
+                .into_iter()
+                .map(|x| x.iter().fold(0, |acc, &&y| acc + y))
+                .sorted();
             if has_duplicates(&sums) {
                 return false;
             }
@@ -242,7 +242,7 @@ pub fn p103() -> String {
     }
 
     fn is_sss(a: &[usize]) -> bool {
-        if has_duplicates(&a) || !pass_rule_2(&a) || !pass_rule_1(&a) {
+        if has_duplicates(a) || !pass_rule_2(a) || !pass_rule_1(a) {
             return false;
         }
         true
@@ -262,11 +262,11 @@ pub fn p103() -> String {
             }
         }
         candidates = candidates.into_iter()
-                               .sorted()
-                               .into_iter()
-                               .dedup()
-                               .filter(|x| x.len() == vec.len())
-                               .collect_vec();
+            .sorted()
+            .into_iter()
+            .dedup()
+            .filter(|x| x.len() == vec.len())
+            .collect_vec();
         candidates
     }
 
@@ -302,13 +302,13 @@ pub fn p104() -> String {
     let mut b: usize = 1;
     let mut cnt = 1;
     loop {
-        a = a + b;
+        a += b;
         // let t = a;
         // a = b;
         // b = t;
         mem::swap(&mut a, &mut b);
-        a = a % big;
-        b = b % big;
+        a %= big;
+        b %= big;
         cnt += 1;
         let back = b.to_string();
         if eu::is_pandigital(back, 1) {
@@ -330,12 +330,12 @@ pub fn p105() -> String {
     fn get_data() -> Vec<Vec<usize>> {
         let buffer = include_str!("../data/p105_sets.txt");
         buffer.lines()
-              .map(|x| {
-                  x.split(',')
-                   .map(|x| x.parse().unwrap())
-                   .sorted()
-              })
-              .collect_vec()
+            .map(|x| {
+                x.split(',')
+                    .map(|x| x.parse().unwrap())
+                    .sorted()
+            })
+            .collect_vec()
     }
 
     fn vec_sum(set: &[usize]) -> usize {
@@ -354,7 +354,7 @@ pub fn p105() -> String {
         if xs.len() < 3 {
             return true;
         }
-        let t = eu::accumulate(&xs);
+        let t = eu::accumulate(xs);
         let lhs = t.iter().skip(1).take(xs.len() / 2).collect_vec();
 
         let t = eu::accumulate(&xs.iter().rev().cloned().collect_vec());
@@ -366,10 +366,10 @@ pub fn p105() -> String {
     fn pass_rule_1(xs: &[usize]) -> bool {
         for i in 3..(xs.len() / 2) + 1 {
             let sums = xs.iter()
-                         .combinations_n(i)
-                         .into_iter()
-                         .map(|x| x.iter().fold(0, |acc, &&y| acc + y))
-                         .sorted();
+                .combinations_n(i)
+                .into_iter()
+                .map(|x| x.iter().fold(0, |acc, &&y| acc + y))
+                .sorted();
             if has_duplicates(&sums) {
                 return false;
             }
@@ -378,15 +378,15 @@ pub fn p105() -> String {
     }
 
     fn is_sss(a: &[usize]) -> bool {
-        if has_duplicates(&a) || !pass_rule_2(&a) || !pass_rule_1(&a) {
+        if has_duplicates(a) || !pass_rule_2(a) || !pass_rule_1(a) {
             return false;
         }
         true
     }
 
     let sum = get_data()
-                  .into_iter()
-                  .fold(0, |acc, x| if is_sss(&x) { acc + vec_sum(&x) } else { acc });
+        .into_iter()
+        .fold(0, |acc, x| if is_sss(&x) { acc + vec_sum(&x) } else { acc });
 
     assert_eq!(sum, 73702);
     format!("p105 = {}", sum)
@@ -396,17 +396,17 @@ pub fn p105() -> String {
 pub fn p106() -> String {
     fn has_duplicates(xs: &[&usize], ys: &[&usize]) -> bool {
         let cnt = xs.iter()
-                    .take_while(|x| !ys.contains(x))
-                    .count();
+            .take_while(|x| !ys.contains(x))
+            .count();
         cnt < xs.len()
     }
 
     let vec = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
     let xs = (2..vec.len() / 2 + 1)
-                 .map(|i| vec.iter().combinations_n(i).sorted())
-                 .flatten()
-                 .sorted();
+        .map(|i| vec.iter().combinations_n(i).sorted())
+        .flatten()
+        .sorted();
 
     let mut res = 0;
     for (i, v1) in xs.clone().iter().enumerate() {
@@ -414,7 +414,7 @@ pub fn p106() -> String {
             if v1.len() + v2.len() > vec.len() || v1.len() != v2.len() {
                 continue;
             }
-            if !has_duplicates(v1, &v2) {
+            if !has_duplicates(v1, v2) {
                 let mut at_least_one = false;
                 for k in 0..v1.len() {
                     if v1[k] > v2[k] {
@@ -438,24 +438,24 @@ pub fn p107() -> String {
     fn get_data() -> Vec<Vec<u32>> {
         let buffer = include_str!("../data/p107_network.txt");
         buffer.lines()
-              .map(|x| {
-                  x.split(',')
-                   .map(|x| if x != "-" { x.parse().unwrap() } else { 0 })
-                   .collect::<Vec<u32>>()
-              })
-              .collect()
+            .map(|x| {
+                x.split(',')
+                    .map(|x| if x != "-" { x.parse().unwrap() } else { 0 })
+                    .collect::<Vec<u32>>()
+            })
+            .collect()
     }
 
     fn make_graph(xs: &[Vec<u32>]) -> Graph<(), u32> {
         let vec = xs.iter()
-                    .enumerate()
-                    .flat_map(|(i, v)| {
-                        (i..v.len())
-                            .map(|j| (i as u32, j as u32, v[j]))
-                            .collect::<Vec<_>>()
-                    })
-                    .filter(|&(_, _, v)| v != 0)
-                    .collect::<Vec<_>>();
+            .enumerate()
+            .flat_map(|(i, v)| {
+                (i..v.len())
+                    .map(|j| (i as u32, j as u32, v[j]))
+                    .collect::<Vec<_>>()
+            })
+            .filter(|&(_, _, v)| v != 0)
+            .collect::<Vec<_>>();
         Graph::<(), u32>::from_edges(&vec)
     }
 
@@ -473,18 +473,18 @@ pub fn p107() -> String {
 pub fn p108() -> String {
     fn dio_recip_cnt(n: usize) -> usize {
         (primes::prime_factors(n)
-             .into_iter()
-             .group_by(|x| *x)
-             .map(|(_, ys)| ys.len())
-             .fold(1, |acc, x| acc * (2 * x + 1)) + 1) / 2
+            .into_iter()
+            .group_by(|x| *x)
+            .map(|(_, ys)| ys.len())
+            .fold(1, |acc, x| acc * (2 * x + 1)) + 1) / 2
     }
 
     fn solve() -> usize {
         let list = primes::prime_factor_cnt(300_000)
-                       .iter()
-                       .enumerate()
-                       .filter_map(|(i, &v)| if v > 5 { Some(i) } else { None })
-                       .collect_vec();
+            .iter()
+            .enumerate()
+            .filter_map(|(i, &v)| if v > 5 { Some(i) } else { None })
+            .collect_vec();
 
         for v in list {
             if dio_recip_cnt(v) > 1000 {
@@ -544,8 +544,8 @@ pub fn p110() -> String {
     fn value(xs: &[usize]) -> usize {
         let primes = vec![2 as usize, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53];
         xs.iter()
-          .enumerate()
-          .fold(1, |acc, (i, &v)| acc * primes[i].pow(v as u32) as usize)
+            .enumerate()
+            .fold(1, |acc, (i, &v)| acc * primes[i].pow(v as u32) as usize)
     }
 
     fn get_candidates() -> Vec<Vec<usize>> {
@@ -568,16 +568,16 @@ pub fn p110() -> String {
 
     fn solve() -> usize {
         let solutions = get_candidates()
-                            .clone()
-                            .iter()
-                            .map(|x| (distinct_solution(&x), x.clone()))
-                            .filter(|&(sol, _)| sol > 4_000_000)
-                            .sorted();
+            .clone()
+            .iter()
+            .map(|x| (distinct_solution(x), x.clone()))
+            .filter(|&(sol, _)| sol > 4_000_000)
+            .sorted();
 
         let best_soltion = solutions.iter()
-                                    .filter(|&&(sol, _)| sol == solutions[0].0)
-                                    .map(|&(_, ref xs)| value(&xs))
-                                    .sorted();
+            .filter(|&&(sol, _)| sol == solutions[0].0)
+            .map(|&(_, ref xs)| value(xs))
+            .sorted();
 
         best_soltion[0]
     }
@@ -589,6 +589,5 @@ pub fn p110() -> String {
 
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
-    (101,
-     vec![p101, p102, p103, p104, p105, p106, p107, p108, p109, p110])
+    (101, vec![p101, p102, p103, p104, p105, p106, p107, p108, p109, p110])
 }

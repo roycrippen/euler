@@ -39,23 +39,23 @@ pub fn p021() -> String {
 /// Names scores
 pub fn p022() -> String {
     let buffer = include_str!("../data/p022_names.txt")
-                     .chars()
-                     .filter(|&x| x != '\"' && x != '\n')
-                     .collect::<String>();
+        .chars()
+        .filter(|&x| x != '\"' && x != '\n')
+        .collect::<String>();
 
     let names = buffer.split(',')
-                      .map(|x| {
-                          let ys = eu::to_bytes(&x);
-                          ys.iter().map(|&y| y as usize - 64).collect::<Vec<usize>>()
-                      })
-                      .sorted();
+        .map(|x| {
+            let ys = eu::to_bytes(&x);
+            ys.iter().map(|&y| y as usize - 64).collect::<Vec<usize>>()
+        })
+        .sorted();
 
     let sum = names.iter()
-                   .enumerate()
-                   .fold(0, |acc, (i, xs)| {
-                       let val = xs.iter().fold(0, |tot, x| tot + x);
-                       acc + val * (i + 1)
-                   });
+        .enumerate()
+        .fold(0, |acc, (i, xs)| {
+            let val = xs.iter().fold(0, |tot, x| tot + x);
+            acc + val * (i + 1)
+        });
 
     assert!(sum == 871198282);
     format!("p022 = {}", sum)
@@ -108,7 +108,7 @@ pub fn p024() -> String {
         a.clear();
         a.extend_from_slice(left);
         a.extend_from_slice(right);
-        n = n - (division * (pos - 1));
+        n -= division * (pos - 1);
     }
 
     let mut tt: String = String::new();
@@ -245,6 +245,5 @@ pub fn p030() -> String {
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
     // Euler solutions in this crate.
-    (21,
-     vec![p021, p022, p023, p024, p025, p026, p027, p028, p029, p030])
+    (21, vec![p021, p022, p023, p024, p025, p026, p027, p028, p029, p030])
 }

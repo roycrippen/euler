@@ -50,7 +50,7 @@ pub fn p002() -> String {
             .take_while(|&x| x < n)
             .filter(|x| x % 2 == 0)
             .scan(0, |acc, fib| {
-                *acc = *acc + fib;
+                *acc += fib;
                 Some(*acc)
             })
             .max()
@@ -139,20 +139,20 @@ pub fn p007() -> String {
 /// Largest product in a series
 pub fn p008() -> String {
     let vals = include_str!("../data/p008_product.txt")
-                   .bytes()
-                   .filter(|&b| b != 10)
-                   .map(|x| x as usize - 48)
-                   .collect::<Vec<_>>();
+        .bytes()
+        .filter(|&b| b != 10)
+        .map(|x| x as usize - 48)
+        .collect::<Vec<_>>();
 
     let max = (0..(vals.len() - 12))
-                  .map(|i| {
-                      vals.iter()
-                          .take(i + 13)
-                          .skip(i)
-                          .fold(1, |acc, x| acc * x)
-                  })
-                  .max()
-                  .unwrap();
+        .map(|i| {
+            vals.iter()
+                .take(i + 13)
+                .skip(i)
+                .fold(1, |acc, x| acc * x)
+        })
+        .max()
+        .unwrap();
 
     assert_eq!(max, 23514624000);
     format!("p008 = {}", max)
@@ -161,15 +161,15 @@ pub fn p008() -> String {
 /// Special Pythagorean triplet
 pub fn p009() -> String {
     let res = (1..500)
-                  .flat_map(|a| {
-                      (a..500).filter_map(move |b| {
-                          let c = ((a * a + b * b) as f64).sqrt();
-                          let circum = a + b + (c as usize);
-                          if c.fract() < EPSILON && circum == 1000 { Some(a * b * (c as usize)) } else { None }
-                      })
-                  })
-                  .nth(0)
-                  .unwrap();
+        .flat_map(|a| {
+            (a..500).filter_map(move |b| {
+                let c = ((a * a + b * b) as f64).sqrt();
+                let circum = a + b + (c as usize);
+                if c.fract() < EPSILON && circum == 1000 { Some(a * b * (c as usize)) } else { None }
+            })
+        })
+        .nth(0)
+        .unwrap();
 
     assert_eq!(res, 31875000);
     format!("p009 = {}", res)
@@ -203,6 +203,5 @@ pub fn p010() -> String {
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
     // Euler solutions in this crate.
-    (1,
-     vec![p001, p002, p003, p004, p005, p006, p007, p008, p009, p010])
+    (1, vec![p001, p002, p003, p004, p005, p006, p007, p008, p009, p010])
 }

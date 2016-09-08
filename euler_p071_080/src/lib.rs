@@ -87,9 +87,9 @@ pub fn p075() -> String {
             if a + b + c >= n {
                 return vec![];
             }
-            let v = a + b + c;
+            let val = a + b + c;
             let mut res: Vec<usize> = Vec::new();
-            res.push(v);
+            res.push(val);
             res.append(&mut p(n,
                               c + c + a - b - b,
                               a + a + c + c - b,
@@ -180,8 +180,8 @@ pub fn p078() -> String {
     fn partitions() -> usize {
         // list of pentagonal numbers
         let k = (1..250)
-                    .flat_map(|i| vec![i * (3 * i - 1) / 2, i * (3 * i - 1) / 2 + i])
-                    .collect::<Vec<_>>();
+            .flat_map(|i| vec![i * (3 * i - 1) / 2, i * (3 * i - 1) / 2 + i])
+            .collect::<Vec<_>>();
 
         let mut ps: Vec<i64> = vec![1];
         let sign: Vec<i64> = vec![1, 1, -1, -1];
@@ -253,11 +253,11 @@ pub fn p079() -> String {
 pub fn p080() -> String {
     let perfect = vec![4, 9, 16, 25, 36, 49, 64, 81, 100];
     let sum = (2..101)
-                  .filter(|x| !perfect.contains(x))
-                  .fold(0, |acc, x| {
-                      let sqrt_str = eu_big::precision_sqrt(x, 100).to_string();
-                      acc + eu::sum_of_digits(sqrt_str)
-                  });
+        .filter(|x| !perfect.contains(x))
+        .fold(0, |acc, x| {
+            let sqrt_str = eu_big::precision_sqrt(x, 100).to_string();
+            acc + eu::sum_of_digits(sqrt_str)
+        });
 
     assert_eq!(sum, 40886);
     format!("p080 = {}", sum)
@@ -266,6 +266,5 @@ pub fn p080() -> String {
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
     // Euler solutions in this crate.
-    (71,
-     vec![p071, p072, p073, p074, p075, p076, p077, p078, p079, p080])
+    (71, vec![p071, p072, p073, p074, p075, p076, p077, p078, p079, p080])
 }

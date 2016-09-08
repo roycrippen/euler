@@ -151,11 +151,11 @@ pub fn p093() -> String {
         let perm_nums = &eu::perms_without_reps_recur(4, &nums);
         for ns in perm_nums {
             for os in perm_ops {
-                eval_group1(&ns, &os, &mut set);
-                eval_group2(&ns, &os, &mut set);
-                eval_group3(&ns, &os, &mut set);
-                eval_group4(&ns, &os, &mut set);
-                eval_group5(&ns, &os, &mut set);
+                eval_group1(ns, os, &mut set);
+                eval_group2(ns, os, &mut set);
+                eval_group3(ns, os, &mut set);
+                eval_group4(ns, os, &mut set);
+                eval_group5(ns, os, &mut set);
             }
         }
         let cnt = count_set(set);
@@ -608,7 +608,7 @@ pub fn p098() -> String {
         let mut hash = HashMap::new();
         let ws1 = w1.chars().collect_vec();
         let nums = &num.to_string().chars().collect_vec();
-        if get_pattern(&ws1) != get_pattern(&nums) {
+        if get_pattern(&ws1) != get_pattern(nums) {
             return None;
         }
         for i in 0..ws1.len() {

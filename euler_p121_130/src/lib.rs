@@ -156,7 +156,7 @@ pub fn p125() -> String {
         let limit = (n as f64).sqrt() as usize + 1;
         (0..limit)
             .scan(0, |state, x| {
-                *state = *state + x * x;
+                *state += x * x;
                 Some(*state)
             })
             .collect()

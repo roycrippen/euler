@@ -167,7 +167,7 @@ pub fn p036() -> String {
         let mut num = n;
         while num > 0 {
             rev = rev * 10 + num % 10;
-            num = num / 10
+            num /= 10
         }
         rev == n
     }
@@ -329,6 +329,5 @@ pub fn p040() -> String {
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
     // Euler solutions in this crate.
-    (31,
-     vec![p031, p032, p033, p034, p035, p036, p037, p038, p039, p040])
+    (31, vec![p031, p032, p033, p034, p035, p036, p037, p038, p039, p040])
 }
