@@ -23,17 +23,17 @@ pub fn p091() -> String {
 
     let cnt = SIZE * SIZE * 3 +
               (1..SIZE + 1)
-                  .flat_map(|x| {
-                      (1..SIZE + 1)
-                          .map(|y| {
-                              let gcd = gcd(x, y);
-                              let dx = x / gcd;
-                              let dy = y / gcd;
-                              cmp::min(y / dx, (SIZE - x) / dy) * 2
-                          })
-                          .collect::<Vec<_>>()
-                  })
-                  .fold(0, |acc, x| acc + x);
+        .flat_map(|x| {
+            (1..SIZE + 1)
+                .map(|y| {
+                    let gcd = gcd(x, y);
+                    let dx = x / gcd;
+                    let dy = y / gcd;
+                    cmp::min(y / dx, (SIZE - x) / dy) * 2
+                })
+                .collect::<Vec<_>>()
+        })
+        .fold(0, |acc, x| acc + x);
 
     assert_eq!(cnt, 14234);
     format!("p091 = {}", cnt)
@@ -135,11 +135,11 @@ pub fn p093() -> String {
 
     fn count_set(set: HashSet<i32>) -> usize {
         set.into_iter()
-           .sorted()
-           .into_iter()
-           .zip(1..)
-           .filter(|&(a, b)| a == b)
-           .count()
+            .sorted()
+            .into_iter()
+            .zip(1..)
+            .filter(|&(a, b)| a == b)
+            .count()
     }
 
     let mut max = (0, vec![]);
@@ -247,21 +247,21 @@ pub fn p095() -> String {
     assert!(is_amicable_chain(138, &mut divs) == None);
 
     let amic_chains = (1..max)
-                          .map(|x| (x, is_amicable_chain(x, &mut divs)))
-                          .filter(|&(_, amic)| amic != None)
-                          .map(|(x, tup)| (x, tup.unwrap().0, tup.unwrap().1))
-                          .collect::<Vec<_>>();
+        .map(|x| (x, is_amicable_chain(x, &mut divs)))
+        .filter(|&(_, amic)| amic != None)
+        .map(|(x, tup)| (x, tup.unwrap().0, tup.unwrap().1))
+        .collect::<Vec<_>>();
 
     let max_cnt = amic_chains.iter()
-                             .map(|&(_, cnt, _)| cnt)
-                             .max()
-                             .unwrap();
+        .map(|&(_, cnt, _)| cnt)
+        .max()
+        .unwrap();
 
     let min = amic_chains.iter()
-                         .filter(|&&(_, cnt, _)| cnt == max_cnt)
-                         .map(|&(_, _, min)| min)
-                         .min()
-                         .unwrap();
+        .filter(|&&(_, cnt, _)| cnt == max_cnt)
+        .map(|&(_, _, min)| min)
+        .min()
+        .unwrap();
 
     assert_eq!(min, 14316);
     format!("p095 = {}", min)
@@ -564,9 +564,9 @@ pub fn p098() -> String {
     // sort each word within words, save words original index
     fn get_sorted_words(words: Vec<String>) -> Vec<(Vec<char>, usize)> {
         words.into_iter()
-             .enumerate()
-             .map(|(i, x)| (x.chars().sorted(), i))
-             .sorted()
+            .enumerate()
+            .map(|(i, x)| (x.chars().sorted(), i))
+            .sorted()
     }
 
     // find anagram pairs
@@ -635,8 +635,8 @@ pub fn p098() -> String {
     let mut res: usize = 0;
     for i in 5..max_anagram + 1 {
         let anagrams = all_anagrams.iter()
-                                   .filter(|&&(x, _)| words[x].len() == i)
-                                   .collect_vec();
+            .filter(|&&(x, _)| words[x].len() == i)
+            .collect_vec();
         let squares = get_squares(i);
 
         for v in &anagrams {
@@ -665,14 +665,14 @@ pub fn p099() -> String {
     // logb(x^y) = y ∙ logb(x)
     let buffer = include_str!("../data/p099_base_exp.txt");
     let xs = buffer.lines()
-                   .map(|x| {
-                       x.split(',')
-                        .map(|x| x.parse::<f64>().unwrap())
-                        .collect_vec()
-                   })
-                   .enumerate()
-                   .map(|(i, pair)| ((pair[1] * pair[0].ln()).to_string(), i))
-                   .sorted();
+        .map(|x| {
+            x.split(',')
+                .map(|x| x.parse::<f64>().unwrap())
+                .collect_vec()
+        })
+        .enumerate()
+        .map(|(i, pair)| ((pair[1] * pair[0].ln()).to_string(), i))
+        .sorted();
 
     let res = xs.last().unwrap().1 + 1;
     assert_eq!(res, 709);
@@ -696,11 +696,10 @@ pub fn p100() -> String {
     }
 
     assert_eq!(b as usize, 756872327473);
-    format!("eu100 = {}", b)
+    format!("p100 = {}", b)
 } // 756872327473
 
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
-    (91,
-     vec![p091, p092, p093, p094, p095, p096, p097, p098, p099, p100])
+    (91, vec![p091, p092, p093, p094, p095, p096, p097, p098, p099, p100])
 }

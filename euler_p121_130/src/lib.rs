@@ -2,13 +2,14 @@
 //!
 //! This crate is designed to be used via crate `euler`.
 
-use std::collections::HashMap;
-use std::collections::HashSet;
-
+extern crate euler_library;
+extern crate num;
 extern crate primal;
 
-extern crate euler_library;
 use euler_library::common as eu;
+use num::integer::gcd;
+use std::collections::HashMap;
+use std::collections::HashSet;
 
 /// Disc game prize fund
 pub fn p121() -> String {
@@ -17,10 +18,10 @@ pub fn p121() -> String {
     // for n = 4, p([1,0,1,1] = 1/2 * 2/3 * 1/4 * 1/5)
     fn p_win(xs: &[usize]) -> f64 {
         xs.iter()
-          .enumerate()
-          .fold(1.0, |acc, (i, &x)| {
-              if x != 0 { acc * (1.0 / (2.0 + i as f64)) } else { acc * (1.0 + i as f64) / (2.0 + i as f64) }
-          })
+            .enumerate()
+            .fold(1.0, |acc, (i, &x)| {
+                if x != 0 { acc * (1.0 / (2.0 + i as f64)) } else { acc * (1.0 + i as f64) / (2.0 + i as f64) }
+            })
     }
 
     fn solve(n: u32) -> usize {
@@ -30,14 +31,14 @@ pub fn p121() -> String {
         // ws.collect() = [[0, 1, 1, 1], [1, 0, 1, 1], [1, 1, 0, 1], [1, 1, 1, 0], [1, 1, 1, 1]]
         let ws = (0..max).filter_map(|i| {
             let s = format!("{:015b}", i)
-                        .into_bytes()
-                        .iter()
-                        .map(|y| (y - 48) as usize)
-                        .collect::<Vec<_>>();
+                .into_bytes()
+                .iter()
+                .map(|y| (y - 48) as usize)
+                .collect::<Vec<_>>();
             let enough_blues = s.iter().fold(0, |acc, v| acc + *v as u32) >= blues_needed;
             if enough_blues { Some(s) } else { None }
         });
-        // send just subslice  ofr xs to p_win() for testing below n = 15.
+        // send just subslice  of xs to p_win() for testing below n = 15.
         // format! takes literals only so ws elements have length of 15
         (1.0 / ws.fold(0.0, |acc, xs| acc + p_win(&xs[(15 - n as usize)..]))) as usize
     }
@@ -225,8 +226,59 @@ pub fn p126() -> String {
 
 /// abc-hits - unimplemented
 pub fn p127() -> String {
-    "p127 = unimplemented".to_string()
-}
+
+    const MAX: usize = 120001;
+
+    #[derive(Debug, Clone, Copy)]
+    struct Rad {
+        n: usize,
+        rad: usize,
+    }
+
+    fn get_rads() -> Vec<Rad> {
+        let sieve = primal::Sieve::new(MAX);
+        let mut rads = vec![Rad { n: 1, rad: 1 }; MAX];
+
+        for n in 1..sieve.prime_pi(MAX) + 1 {
+            let p = sieve.nth_prime(n);
+            let mut i = p;
+            while i < MAX {
+                rads[i].rad *= p;
+                i += p;
+            }
+        }
+
+        for (i, v) in rads.iter_mut().enumerate() {
+            v.n = i
+        }
+
+        rads
+    }
+
+    let rads = get_rads();
+    let mut rads_sorted = rads.clone();
+    rads_sorted.sort_by(|a, b| a.rad.cmp(&b.rad));
+    let mut res = 0;
+
+    for c in rads.iter().skip(3) {
+        let c_div_2 = c.n / 2;
+        for a in rads_sorted.iter().skip(1) {
+            if a.n >= c_div_2 {
+                continue;
+            }
+            if a.rad * c.rad > c_div_2 {
+                break;
+            };
+            let b = c.n - a.n;
+            if a.rad * rads[b].rad * c.rad < c.n && gcd(a.rad, rads[b].rad) == 1 {
+                res += c.n
+            }
+        }
+    }
+
+    assert_eq!(res, 18407904);
+    format!("p127 = {}", res)
+} // 18407904
 
 /// Hexagonal tile differences - unimplemented
 pub fn p128() -> String {
@@ -245,5 +297,5 @@ pub fn p130() -> String {
 
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
-    (121, vec![p121, p122, p123, p124, p125, p126])
+    (121, vec![p121, p122, p123, p124, p125, p126, p127])
 }

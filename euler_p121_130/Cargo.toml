@@ -5,6 +5,7 @@ authors = ["roycrippen <roycrippen@gmail.com>"]
 
 [dependencies]
 primal = "*"
+num = "*"
 
 [dependencies.euler_library]
 git = "https://github.com/roycrippen/euler_library"
