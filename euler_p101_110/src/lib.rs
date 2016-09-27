@@ -230,7 +230,7 @@ pub fn p103() -> String {
     fn pass_rule_1(xs: &[usize]) -> bool {
         for i in 3..(xs.len() / 2) + 1 {
             let sums = xs.iter()
-                .combinations_n(i)
+                .combinations(i)
                 .into_iter()
                 .map(|x| x.iter().fold(0, |acc, &&y| acc + y))
                 .sorted();
@@ -366,7 +366,7 @@ pub fn p105() -> String {
     fn pass_rule_1(xs: &[usize]) -> bool {
         for i in 3..(xs.len() / 2) + 1 {
             let sums = xs.iter()
-                .combinations_n(i)
+                .combinations(i)
                 .into_iter()
                 .map(|x| x.iter().fold(0, |acc, &&y| acc + y))
                 .sorted();
@@ -404,7 +404,7 @@ pub fn p106() -> String {
     let vec = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
     let xs = (2..vec.len() / 2 + 1)
-        .map(|i| vec.iter().combinations_n(i).sorted())
+        .map(|i| vec.iter().combinations(i).sorted())
         .flatten()
         .sorted();
 
@@ -475,7 +475,8 @@ pub fn p108() -> String {
         (primes::prime_factors(n)
             .into_iter()
             .group_by(|x| *x)
-            .map(|(_, ys)| ys.len())
+            .into_iter()
+            .map(|(_, ys)| ys.into_iter().count())
             .fold(1, |acc, x| acc * (2 * x + 1)) + 1) / 2
     }
 

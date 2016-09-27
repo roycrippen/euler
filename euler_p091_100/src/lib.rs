@@ -144,7 +144,7 @@ pub fn p093() -> String {
 
     let mut max = (0, vec![]);
     let perm_ops = &eu::perms_with_reps(3, &['+', '-', '*', '/']);
-    let nums_comb = vec![1, 2, 3, 4, 5, 6, 7, 8, 9].into_iter().combinations_n(4);
+    let nums_comb = vec![1, 2, 3, 4, 5, 6, 7, 8, 9].into_iter().combinations(4);
 
     for nums in nums_comb {
         let mut set: HashSet<i32> = HashSet::new();

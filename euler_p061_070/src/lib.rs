@@ -45,14 +45,14 @@ pub fn p061() -> String {
         let fs: Vec<fn(usize) -> usize> = vec![f3, f4, f5, f6, f7, f8];
 
         fs.iter()
-          .map(|f| {
-              (1..)
-                  .map(f)
-                  .skip_while(|&p| p < 999)
-                  .take_while(|&p| p < 10000)
-                  .collect::<Vec<_>>()
-          })
-          .collect::<Vec<Vec<_>>>()
+            .map(|f| {
+                (1..)
+                    .map(f)
+                    .skip_while(|&p| p < 999)
+                    .take_while(|&p| p < 10000)
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<Vec<_>>>()
     }
 
     fn add_to_set(list: Vec<Vec<usize>>, vs: Vec<usize>) -> Vec<Vec<usize>> {
@@ -81,8 +81,8 @@ pub fn p061() -> String {
                 list = add_to_set(list, pss[p].clone());
             }
             let res = list.iter()
-                          .filter(|xs| is_cyclic(xs[xs.len() - 1], xs[0]))
-                          .collect::<Vec<_>>();
+                .filter(|xs| is_cyclic(xs[xs.len() - 1], xs[0]))
+                .collect::<Vec<_>>();
             if res.len() == 1 && res[0].len() == p.len() {
                 // println!("{:?}", res);
                 return res[0].iter().fold(0, |acc, x| acc + x);
@@ -100,7 +100,7 @@ pub fn p061() -> String {
 pub fn p062() -> String {
     let mut xs: Vec<(usize, usize)> = Vec::new();
     for i in 300..10000 {
-        let cube = (i as f64).powf(3.) as usize;
+        let cube = i * i * i;
         let mut ds = eu::to_bytes(cube);
         ds.sort();
         // pad front of number with '9' so '0's not lost
@@ -109,15 +109,15 @@ pub fn p062() -> String {
     }
 
     xs.sort();
-    let ys = xs.into_iter()
-               .group_by(|&(k, _)| k)
-               .filter(|&(_, ref group)| group.len() == 5)
-               .collect::<Vec<_>>();
+    let grouped = xs.into_iter().group_by(|&(k, _)| k);
 
     let mut res: usize = 0;
-    if !ys.is_empty() {
-        // println!("{:?}", ys[0]);
-        res = ys[0].1[0].1
+    for (_, group) in &grouped {
+        let t = group.into_iter().map(|x| x).collect::<Vec<_>>();
+        if t.len() == 5 {
+            res = t[0].1;
+            break;
+        }
     }
 
     assert_eq!(res, 127035954683);
@@ -168,19 +168,19 @@ pub fn p064() -> String {
 /// Convergents of e
 pub fn p065() -> String {
     let e = [1].iter()
-               .cycle()
-               .enumerate()
-               .skip(2)
-               .map(|(idx, &x)| if idx % 3 == 0 { idx / 3 * 2 } else { x })
-               .take(99)
-               .collect::<Vec<_>>();
+        .cycle()
+        .enumerate()
+        .skip(2)
+        .map(|(idx, &x)| if idx % 3 == 0 { idx / 3 * 2 } else { x })
+        .take(99)
+        .collect::<Vec<_>>();
 
     let (n, _) = eu_big::continued_fraction(2, e);
     // println!("numerator = {}", n.clone().to_string());
     // println!("denominator = {}", d.clone().to_string());
     let sum = eu::to_bytes(n)
-                  .iter()
-                  .fold(0 as u32, |acc, &x| acc + (x as u32) - 48);
+        .iter()
+        .fold(0 as u32, |acc, &x| acc + (x as u32) - 48);
 
     assert_eq!(sum, 272);
     format!("p065 = {}", sum)
@@ -233,12 +233,12 @@ pub fn p067() -> String {
     fn get_data() -> Vec<Vec<u32>> {
         let buffer = include_str!("../data/p067_triangle.txt");
         buffer.lines()
-              .map(|x| {
-                  x.split(' ')
-                   .map(|x| x.parse().unwrap())
-                   .collect::<Vec<u32>>()
-              })
-              .collect()
+            .map(|x| {
+                x.split(' ')
+                    .map(|x| x.parse().unwrap())
+                    .collect::<Vec<u32>>()
+            })
+            .collect()
     }
 
     let mut xss = get_data();
@@ -276,9 +276,9 @@ pub fn p068() -> String {
         };
         res.push(t);
         res = res.into_iter()
-                 .sorted_by(|a, b| Ord::cmp(&b.sum, &a.sum))
-                 .into_iter()
-                 .collect::<Vec<Ring>>();
+            .sorted_by(|a, b| Ord::cmp(&b.sum, &a.sum))
+            .into_iter()
+            .collect::<Vec<Ring>>();
         res
     }
 
@@ -309,18 +309,18 @@ pub fn p068() -> String {
                 ring.tup.0 = external[i]
             }
             rings = rings.into_iter()
-                         .sorted_by(|a, b| Ord::cmp(&a.tup, &b.tup))
-                         .into_iter()
-                         .collect::<Vec<Ring>>();
+                .sorted_by(|a, b| Ord::cmp(&a.tup, &b.tup))
+                .into_iter()
+                .collect::<Vec<Ring>>();
             for (i, ring) in rings.clone().iter().enumerate() {
                 if ring.orig_ord < rings[0].orig_ord {
                     rings[i].orig_ord += 10;
                 }
             }
             rings = rings.into_iter()
-                         .sorted_by(|a, b| Ord::cmp(&a.orig_ord, &b.orig_ord))
-                         .into_iter()
-                         .collect::<Vec<Ring>>();
+                .sorted_by(|a, b| Ord::cmp(&a.orig_ord, &b.orig_ord))
+                .into_iter()
+                .collect::<Vec<Ring>>();
             let mut term: Vec<u32> = Vec::new();
             let mut str = "".to_string();
             for ring in rings {
@@ -402,6 +402,5 @@ pub fn p070a() -> String {
 /// Returns (start, Vec of solution functions) for all solutions in this crate.
 pub fn get_functions() -> (u32, Vec<fn() -> String>) {
     // Euler solutions in this crate.
-    (61,
-     vec![p061, p062, p063, p064, p065, p066, p067, p068, p069, p070])
+    (61, vec![p061, p062, p063, p064, p065, p066, p067, p068, p069, p070])
 }
