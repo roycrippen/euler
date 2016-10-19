@@ -4,8 +4,8 @@ version = "0.1.0"
 authors = ["roycrippen <roycrippen@gmail.com>"]
 
 [dependencies]
-itertools = "*"
-num = "*"
+itertools = "0.5.2"
+num = "0.1.35"
 
 [dependencies.euler_library]
 git = "https://github.com/roycrippen/euler_library"

@@ -4,9 +4,9 @@ version = "0.1.0"
 authors = ["roycrippen <roycrippen@gmail.com>"]
 
 [dependencies]
-primal = "*"
-num = "*"
-permutohedron = "*"
+primal = "0.2.3"
+num = "0.1.35"
+permutohedron = "0.2.2"
 
 [dependencies.euler_library]
 git = "https://github.com/roycrippen/euler_library"

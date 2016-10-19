@@ -22,11 +22,10 @@
 //!
 //! ```
 //! extern crate euler;
-//! use euler::euler_p011_020 as p11_to_20;
 //!
 //! fn main() {
 //!     // test solution 16
-//!     assert_eq!(p11_to_20::p016(), "p016 = 1366");
+//!     assert_eq!(euler::euler_p011_020::p016(), "p016 = 1366");
 //!
 //!     // run all solutions concurrently
 //!     euler::run_all();
@@ -41,10 +40,10 @@
 //!
 //! ## Run
 //!
-//! run solution to problem 88
+//! run solution to problem 120
 //!
 //! ```ignore
-//! cargo run --release 88
+//! cargo run --release 120
 //! ```
 //!
 //! run all solutions concurrently
@@ -133,9 +132,9 @@ pub fn run_all() {
 // Returns a `HashMap` of ("problem number", function to execute) from list of functions fns
 fn get_fn_map(fns: &[fn() -> String], start: u32) -> HashMap<String, fn() -> String> {
     fns.iter()
-       .enumerate()
-       .map(|(i, &f)| ((i as u32 + start).to_string(), f))
-       .collect::<HashMap<_, _>>()
+        .enumerate()
+        .map(|(i, &f)| ((i as u32 + start).to_string(), f))
+        .collect::<HashMap<_, _>>()
 }
 
 // Executes all functions in fns concurrently
