@@ -1,5 +1,5 @@
-extern crate euler;
+extern crate euler_rust;
 
 fn main() {
-  euler::run_all();
+  euler_rust::run_all();
 }

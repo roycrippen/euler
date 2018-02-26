@@ -3,5 +3,8 @@
     "nanos",
     "powf",
     "subsec"
-  ]
+  ],
+  "search.exclude": {
+    "target": true
+  }
 }
