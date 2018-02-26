@@ -1,7 +1,7 @@
 # euler
 Solutions to selected [Project Euler](https://projecteuler.net/) problems written in [Rust](https://www.rust-lang.org/).
 
-Please read the [API documentation here](http://roycrippen.github.io/euler-rust/euler/index.html)
+Please read the [API documentation here](http://roycrippen.github.io/euler_rust/euler/index.html)
 
 [![Build Status](https://travis-ci.org/roycrippen/euler.svg?branch=master)](https://travis-ci.org/roycrippen/euler)
 
@@ -25,10 +25,10 @@ extern crate euler;
 
 fn main() {
     // test solution 16
-    assert_eq!(euler::euler_p011_020::p016(), "p016 = 1366");
+    assert_eq!(euler_rust::euler_p011_020::p016(), "p016 = 1366");
 
     // run all solutions concurrently
-    euler::run_all();
+    euler_rust::run_all();
 }
 ```
 

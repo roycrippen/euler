@@ -15,20 +15,20 @@
 //! And add this to your root crate.
 //!
 //! ```
-//! extern crate euler;
+//! extern crate euler_rust;
 //! ```
 //!
 //! ## Example
 //!
 //! ```
-//! extern crate euler;
+//! extern crate euler_rust;
 //!
 //! fn main() {
 //!     // test solution 16
-//!     assert_eq!(euler::euler_p011_020::p016(), "p016 = 1366");
+//!     assert_eq!(euler_rust::euler_p011_020::p016(), "p016 = 1366");
 //!
 //!     // run all solutions concurrently
-//!     euler::run_all();
+//!     euler_rust::run_all();
 //! }
 //! ```
 //!
@@ -78,14 +78,14 @@ extern crate rayon;
 /// ```
 /// use std::env;
 ///
-/// extern crate euler;
+/// extern crate euler_rust;
 ///
 /// // Invalid or no runtime argument executes p011 through p020 concurrently.
 /// // Executes solution given by single valid runtime argument
 /// // In this example valid args are integers 11 through 20
 /// fn main() {
-///     let (start, fns) = euler::euler_p011_020::get_functions();
-///     euler::run(fns, env::args().nth(1), start);
+///     let (start, fns) = euler_rust::euler_p011_020::get_functions();
+///     euler_rust::run(fns, env::args().nth(1), start);
 /// }
 /// ```
 pub fn run(fns: Vec<fn() -> String>, arg_maybe: Option<String>, start: u32) {
@@ -120,13 +120,13 @@ pub fn run(fns: Vec<fn() -> String>, arg_maybe: Option<String>, start: u32) {
 /// Executes one or all solutions from `euler` crate.
 ///
 /// ```
-/// extern crate euler;
+/// extern crate euler_rust;
 ///
 /// // Invalid or no runtime argument executes all solutions concurrently.
 /// // Executes solution given by single valid runtime argument.
 /// // In this example valid args are integers 1 through solved solutions.
 /// fn main() {
-///     euler::run_all();
+///     euler_rust::run_all();
 /// }
 /// ```
 pub fn run_all() {
