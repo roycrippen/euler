@@ -15,13 +15,13 @@ git = "https://github.com/roycrippen/euler"
 
 And add this to your root crate.
 ```rust
-extern crate euler;
+extern crate euler_rust;
 ```
 
 ## Example
 
 ```rust
-extern crate euler;
+extern crate euler_rust;
 
 fn main() {
     // test solution 16
