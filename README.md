@@ -52,6 +52,6 @@ run all solutions concurrently
 cargo run --release
 ```
 
-Result list will roughly be ordered by execution time, slowest last.
+Result list will be ordered by execution time, slowest last.
 
 

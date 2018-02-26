@@ -51,10 +51,10 @@
 //! ```ignore
 //! cargo run --release
 //! ```
+use rayon::prelude::*;
 use std::collections::HashMap;
-use std::thread;
-use std::sync::mpsc;
 use std::env;
+use std::time::{Duration, Instant};
 
 pub extern crate euler_p001_010;
 pub extern crate euler_p011_020;
@@ -69,6 +69,7 @@ pub extern crate euler_p091_100;
 pub extern crate euler_p101_110;
 pub extern crate euler_p111_120;
 pub extern crate euler_p121_130;
+extern crate rayon;
 
 /// Executes one or more solutions stored in function vector fns.
 ///
@@ -86,16 +87,32 @@ pub extern crate euler_p121_130;
 /// }
 /// ```
 pub fn run(fns: Vec<fn() -> String>, arg_maybe: Option<String>, start: u32) {
-    let mut fns = fns;
+  if let Some(arg) = arg_maybe {
     let fn_map = get_fn_map(&fns, start);
-    if let Some(arg) = arg_maybe {
-        if fn_map.contains_key(&arg) {
-            fns = vec![*fn_map.get(&arg).unwrap()];
-        }
+    if fn_map.contains_key(&arg) {
+      let f = vec![*fn_map.get(&arg).unwrap()];
+      let (res, t) = execute_par_iter(f)[0].clone();
+      println!("{:25}, time = {}", res, t);
+    } else {
+      println!("invalid argument: {}", arg);
+      println!("valid argument: a number between 1 and {}", fns.len())
     }
-    // reversed is faster, gives harder higher number problems more time
-    fns.reverse();
-    execute(fns)
+    return;
+  }
+  println!("Solving {} Euler functions in parallel\n", fns.len());
+  let instant = Instant::now();
+  let xs = execute_par_iter(fns);
+  for (res, t) in xs.clone() {
+    println!("{:25}, time = {:.6} s", res, t)
+  }
+  let duration = get_duration(instant.elapsed());
+  println!("\n     total elapsed time: {:.6} s", duration);
+
+  let sum_exec = xs.iter().fold(0.0, |acc, x| acc + x.1);
+  println!(" sum of execution times: {:.6} s", sum_exec);
+
+  let par_fact = sum_exec / duration;
+  println!("parallel speedup factor: {:.3}", par_fact);
 }
 
 /// Executes one or all solutions from `euler` crate.
@@ -105,53 +122,64 @@ pub fn run(fns: Vec<fn() -> String>, arg_maybe: Option<String>, start: u32) {
 ///
 /// // Invalid or no runtime argument executes all solutions concurrently.
 /// // Executes solution given by single valid runtime argument.
-/// // In this example vaild args are integers 1 through solved solutions.
+/// // In this example valid args are integers 1 through solved solutions.
 /// fn main() {
 ///     euler::run_all();
 /// }
 /// ```
 pub fn run_all() {
-    let (_, mut fns) = euler_p001_010::get_functions();
-    fns.append(&mut euler_p011_020::get_functions().1);
-    fns.append(&mut euler_p021_030::get_functions().1);
-    fns.append(&mut euler_p031_040::get_functions().1);
-    fns.append(&mut euler_p041_050::get_functions().1);
-    fns.append(&mut euler_p051_060::get_functions().1);
-    fns.append(&mut euler_p061_070::get_functions().1);
-    fns.append(&mut euler_p071_080::get_functions().1);
-    fns.append(&mut euler_p081_090::get_functions().1);
-    fns.append(&mut euler_p091_100::get_functions().1);
-    fns.append(&mut euler_p101_110::get_functions().1);
-    fns.append(&mut euler_p111_120::get_functions().1);
-    fns.append(&mut euler_p121_130::get_functions().1);
+  run(get_all_functions().clone(), env::args().nth(1), 1);
+}
 
-    run(fns.clone(), env::args().nth(1), 1);
+// Returns a Vector of all euler functions
+pub fn get_all_functions() -> Vec<fn() -> String> {
+  let (_, mut fns) = euler_p001_010::get_functions();
+  fns.append(&mut euler_p011_020::get_functions().1);
+  fns.append(&mut euler_p021_030::get_functions().1);
+  fns.append(&mut euler_p031_040::get_functions().1);
+  fns.append(&mut euler_p041_050::get_functions().1);
+  fns.append(&mut euler_p051_060::get_functions().1);
+  fns.append(&mut euler_p061_070::get_functions().1);
+  fns.append(&mut euler_p071_080::get_functions().1);
+  fns.append(&mut euler_p081_090::get_functions().1);
+  fns.append(&mut euler_p091_100::get_functions().1);
+  fns.append(&mut euler_p101_110::get_functions().1);
+  fns.append(&mut euler_p111_120::get_functions().1);
+  fns.append(&mut euler_p121_130::get_functions().1);
 
+  fns
 }
 
 // Returns a `HashMap` of ("problem number", function to execute) from list of functions fns
 fn get_fn_map(fns: &[fn() -> String], start: u32) -> HashMap<String, fn() -> String> {
-    fns.iter()
-        .enumerate()
-        .map(|(i, &f)| ((i as u32 + start).to_string(), f))
-        .collect::<HashMap<_, _>>()
+  fns
+    .iter()
+    .enumerate()
+    .map(|(i, &f)| ((i as u32 + start).to_string(), f))
+    .collect::<HashMap<_, _>>()
 }
 
-// Executes all functions in fns concurrently
-fn execute(fns: Vec<fn() -> String>) {
-    let (tx, rx) = mpsc::channel();
-    for f in fns.clone() {
-        let tx = tx.clone();
-        thread::spawn(move || {
-            tx.send(f()).expect("channel send to euler function failed");
-        });
-    }
+// execute all problems in parallel
+fn execute_par_iter(fns: Vec<fn() -> String>) -> Vec<(String, f64)> {
+  let mut xs: Vec<(String, f64)> = fns
+    .par_iter()
+    .map(|f| {
+      let instant = Instant::now();
+      let s = f();
+      let elapsed = instant.elapsed();
+      (s, get_duration(elapsed))
+    })
+    .collect();
 
-    for _ in 0..fns.len() {
-        println!("{}", rx.recv().expect("channel receive failed"));
-    }
-    if fns.len() > 1 {
-        println!("\nSuccessfully solved {} Project Euler problems.",
-                 fns.len());
-    }
+  // sort by time taken to execute
+  xs.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
+  xs
+}
+
+// Return duration string in fractional seconds
+fn get_duration(dur: Duration) -> f64 {
+  let micros = dur.as_secs() * 1_000_000 + dur.subsec_nanos() as u64 / 1_000;
+  // let frac_time = micros as f64 / 1_000_000.0;
+  // format!("{:.6} s", frac_time)
+  micros as f64 / 1_000_000.0
 }

@@ -1,9 +1,12 @@
 [package]
 name = "euler"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["roycrippen <roycrippen@gmail.com>"]
 
 [dependencies]
+rayon = "1.0"
+
+euler_library  = { path = "euler_library"  }
 euler_p001_010 = { path = "euler_p001_010" }
 euler_p011_020 = { path = "euler_p011_020" }
 euler_p021_030 = { path = "euler_p021_030" }
@@ -18,5 +21,11 @@ euler_p101_110 = { path = "euler_p101_110" }
 euler_p111_120 = { path = "euler_p111_120" }
 euler_p121_130 = { path = "euler_p121_130" }
 
-[dependencies.euler_library]
-git = "https://github.com/roycrippen/euler_library"
+[profile.release]
+opt-level = 3
+debug = false
+rpath = false
+lto = false
+debug-assertions = false
+codegen-units = 8
+panic = 'unwind'
