@@ -82,7 +82,7 @@ extern crate rayon;
 ///
 /// // Invalid or no runtime argument executes p011 through p020 concurrently.
 /// // Executes solution given by single valid runtime argument
-/// // In this example vaild args are integers 11 through 20
+/// // In this example valid args are integers 11 through 20
 /// fn main() {
 ///     let (start, fns) = euler::euler_p011_020::get_functions();
 ///     euler::run(fns, env::args().nth(1), start);
