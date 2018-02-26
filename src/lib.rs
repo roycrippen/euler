@@ -56,6 +56,7 @@ use std::collections::HashMap;
 use std::env;
 use std::time::{Duration, Instant};
 
+pub extern crate euler_library;
 pub extern crate euler_p001_010;
 pub extern crate euler_p011_020;
 pub extern crate euler_p021_030;
@@ -69,6 +70,7 @@ pub extern crate euler_p091_100;
 pub extern crate euler_p101_110;
 pub extern crate euler_p111_120;
 pub extern crate euler_p121_130;
+
 extern crate rayon;
 
 /// Executes one or more solutions stored in function vector fns.
