@@ -3,7 +3,7 @@ Solutions to selected [Project Euler](https://projecteuler.net/) problems writte
 
 Please read the [API documentation here](http://roycrippen.github.io/euler_rust/euler/index.html)
 
-[![Build Status](https://travis-ci.org/roycrippen/euler.svg?branch=master)](https://travis-ci.org/roycrippen/euler)
+[![Build Status](https://travis-ci.org/roycrippen/euler_rust.svg?branch=master)](https://travis-ci.org/roycrippen/euler_rust)
 
 ## Using this crate
 
