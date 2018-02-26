@@ -5,10 +5,10 @@ authors = ["roycrippen <roycrippen@gmail.com>"]
 
 [dependencies]
 primal = "0.2.3"
-itertools = "0.5.2"
+itertools = "0.7.6"
 rand = "0.3.14"
 numerals = "0.1.1"
 petgraph = "0.4.11"
 
 [dependencies.euler_library]
-git = "https://github.com/roycrippen/euler_library"
+path = "../euler_library"

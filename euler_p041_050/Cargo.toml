@@ -8,4 +8,4 @@ primal = "0.2.3"
 permutohedron = "0.2.2"
 
 [dependencies.euler_library]
-git = "https://github.com/roycrippen/euler_library"
+path = "../euler_library"

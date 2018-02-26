@@ -417,8 +417,7 @@ pub fn p106() -> String {
   let vec = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   let xs = (2..vec.len() / 2 + 1)
-    .map(|i| vec.iter().combinations(i).sorted())
-    .flatten()
+    .flat_map(|i| vec.iter().combinations(i).sorted())
     .sorted();
 
   let mut res = 0;

@@ -5,6 +5,5 @@ authors = ["roycrippen <roycrippen@gmail.com>"]
 
 [dependencies]
 
-
 [dependencies.euler_library]
-git = "https://github.com/roycrippen/euler_library"
+path = "../euler_library"

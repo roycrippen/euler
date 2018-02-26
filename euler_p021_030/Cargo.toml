@@ -5,8 +5,8 @@ authors = ["roycrippen <roycrippen@gmail.com>"]
 
 [dependencies]
 primal = "0.2.3"
-itertools = "0.5.2"
-num = "0.1.35"
+itertools = "0.7.6"
+num = "0.1.42"
 
 [dependencies.euler_library]
-git = "https://github.com/roycrippen/euler_library"
+path = "../euler_library"
